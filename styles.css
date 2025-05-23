@@ -1,104 +1,206 @@
 body {
   text-align: center;
-  background-color: #011F3F;
+  background-color: #011F3F; /* Solid dark blue background */
   margin: 0;
   padding: 0;
+  font-family: 'Press Start 2P', cursive;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Simple game header styling */
+.game-header {
+  width: 100%;
+  padding: 20px 0;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 #level-title {
-  font-family: 'Press Start 2P', cursive;
-  font-size: 3rem;
-  margin: 5%;
+  font-size: 3.2rem;
+  margin: 15px 0;
   color: #FEF2BF;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  padding: 15px;
+  position: relative;
+}
+
+#high-score-container {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  padding: 10px 20px;
+  display: inline-block;
+  margin: 0 auto 20px;
+  position: relative;
+}
+
+#high-score-label {
+  font-size: 1rem;
+  color: #FEF2BF;
+  margin-bottom: 5px;
+  letter-spacing: 2px;
 }
 
 #high-score {
-  font-family: 'Press Start 2P', cursive;
-  font-size: 1.5rem;
-  margin-bottom: 20px;
+  font-size: 2.5rem;
   color: #FEF2BF;
+}
+
+
+
+.high-score-update {
+  animation: highScoreUpdate 1.5s ease;
+}
+
+@keyframes highScoreUpdate {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.2); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
 .container {
   display: block;
   width: 50%;
   margin: auto;
+  max-width: 600px;
+  padding: 30px;
+  position: relative;
 }
 
 .btn {
-  margin: 25px;
+  margin: 15px;
   display: inline-block;
-  height: 200px;
-  width: 200px;
-  border: 10px solid black;
-  border-radius: 20%;
+  height: 180px;
+  width: 180px;
+  border: 8px solid rgba(0, 0, 0, 0.8);
+  border-radius: 25%;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:hover {
+  transform: scale(1.05);
 }
 
 .game-over {
-  background-color: red;
-  opacity: 0.8;
+  background-color: rgba(200, 0, 0, 0.8);
+  animation: pulse 0.5s;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
 }
 
 .red {
-  background-color: red;
+  background: linear-gradient(135deg, #ff5252, #b33939);
 }
 
 .green {
-  background-color: green;
+  background: linear-gradient(135deg, #33d9b2, #218c74);
 }
 
 .blue {
-  background-color: blue;
+  background: linear-gradient(135deg, #34ace0, #227093);
 }
 
 .yellow {
-  background-color: yellow;
+  background: linear-gradient(135deg, #ffda79, #ccae62);
 }
 
 .pressed {
-  box-shadow: 0 0 20px white;
-  background-color: grey;
+  box-shadow: 0 0 30px white, inset 0 0 20px white;
+  opacity: 0.9;
+  transform: scale(0.95);
+}
+
+.flash {
+  animation: buttonFlash 0.4s;
+  box-shadow: 0 0 70px white, inset 0 0 50px white;
+  z-index: 10;
+  transform: scale(1.15);
+  border-color: white;
+  filter: brightness(1.5);
+}
+
+@keyframes buttonFlash {
+  0% { transform: scale(1); box-shadow: 0 0 0 white; filter: brightness(1); }
+  50% { transform: scale(1.15); box-shadow: 0 0 70px white, inset 0 0 50px white; filter: brightness(1.5); }
+  100% { transform: scale(1); box-shadow: 0 0 0 white; filter: brightness(1); }
 }
 
 footer {
-  margin-top: auto;
+  margin-top: 40px;
   width: 100%;
   text-align: center;
-  padding: 10px 0;
-  background-color: #011f3f;
+  padding: 15px 0;
   color: #FEF2BF;
-  font-size: 20px;
+  font-size: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(254, 242, 191, 0.2);
+  position: relative;
+}
+
+.game-start {
+  animation: gameStart 0.8s ease;
+}
+
+@keyframes gameStart {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 /* Mobile-specific layout adjustments */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   body {
     margin: 0;
-    padding: 0;
+    padding: 15px;
   }
   
   #level-title {
-    font-size: 2rem;
-    margin: 10px 0;
+    font-size: 1.8rem;
+    margin: 15px 0;
+  }
+
+  #high-score-container {
+    padding: 8px 15px;
+  }
+
+  #high-score-label {
+    font-size: 0.8rem;
   }
 
   #high-score {
-    font-size: 1rem;
-    margin-bottom: 15px;
+    font-size: 1.5rem;
   }
   
   .container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
     width: 90%;
-    grid-gap: 10px;
-    margin: auto;
+    padding: 15px;
+    box-sizing: border-box;
   }
 
+  .row {
+    display: flex;
+    justify-content: center;
+  }
+  
   .btn {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
+    margin: 10px;
     margin: 0 auto;
     border-width: 5px;
   }

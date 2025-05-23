@@ -17,11 +17,17 @@ $(document).ready(function() {
 });
 
 function updateHighScoreDisplay() {
-  $("#high-score").text("High Score: " + highScore);
+  $("#high-score").text(highScore);
 }
 
 $(document).click(function() {
   if (!started) {
+    // Add start game animation
+    $(".container").addClass("game-start");
+    setTimeout(function() {
+      $(".container").removeClass("game-start");
+    }, 800);
+    
     $("#level-title").text("Level " + level);
     nextSequence();
     started = true;
@@ -45,7 +51,7 @@ function checkAnswer(currentLevel) {
     if (userClickedPattern.length === gamePattern.length) {
       setTimeout(function () {
         nextSequence();
-      }, 1000);
+      }, 1500); // Increased delay to make the game more accessible
     }
   } else {
     playSound("wrong");
@@ -60,7 +66,15 @@ function checkAnswer(currentLevel) {
     if (level > highScore) {
       highScore = level;
       localStorage.setItem("simonHighScore", highScore);
+      
+      // Animate high score container
+      $("#high-score-container").addClass("high-score-update");
+      setTimeout(function() {
+        $("#high-score-container").removeClass("high-score-update");
+      }, 1500);
+      
       updateHighScoreDisplay();
+      
       // Show a message about the new high score
       setTimeout(function() {
         $("#level-title").text("New High Score: " + highScore + "!");
@@ -79,15 +93,20 @@ function nextSequence() {
   var randomChosenColour = buttonColours[randomNumber];
   gamePattern.push(randomChosenColour);
 
-  $("#" + randomChosenColour).fadeIn(100).fadeOut(100).fadeIn(100);
+  // Flash only the newest color in the sequence
+  $("#" + randomChosenColour).addClass("flash");
   playSound(randomChosenColour);
+  
+  setTimeout(function() {
+    $("#" + randomChosenColour).removeClass("flash");
+  }, 400);
 }
 
 function animatePress(currentColor) {
   $("#" + currentColor).addClass("pressed");
   setTimeout(function () {
     $("#" + currentColor).removeClass("pressed");
-  }, 100);
+  }, 200);
 }
 
 function playSound(name) {
