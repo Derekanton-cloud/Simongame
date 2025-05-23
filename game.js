@@ -1,4 +1,3 @@
-
 var buttonColours = ["red", "blue", "green", "yellow"];
 
 var gamePattern = [];
@@ -7,6 +6,7 @@ var userClickedPattern = [];
 var started = false;
 var level = 0;
 var highScore = 0;
+var touchEnabled = false; // Track if touch is in progress to prevent double actions
 
 // Load the high score from localStorage when the page loads
 $(document).ready(function() {
@@ -14,36 +14,80 @@ $(document).ready(function() {
     highScore = parseInt(localStorage.getItem("simonHighScore"));
     updateHighScoreDisplay();
   }
+  
+  // Add specific handling for mobile devices
+  if ('ontouchstart' in window) {
+    // Add touch handlers for mobile
+    $(document).on("touchstart", function() {
+      if (!started && !touchEnabled) {
+        touchEnabled = true;
+        startGame();
+        
+        // Re-enable touch after a short delay
+        setTimeout(function() {
+          touchEnabled = false;
+        }, 1000);
+      }
+    });
+  }
+  
+  // Prevent scrolling when touching the game buttons on mobile
+  $(".btn").on("touchmove", function(e) {
+    e.preventDefault();
+  });
+  
+  // Prevent pull-to-refresh on mobile
+  $(document).on("touchmove", function(e) {
+    if (started) {
+      e.preventDefault();
+    }
+  });
 });
 
 function updateHighScoreDisplay() {
   $("#high-score").text(highScore);
 }
 
+// Start game function for both click and touch
+function startGame() {
+  // Add start game animation
+  $(".container").addClass("game-start");
+  setTimeout(function() {
+    $(".container").removeClass("game-start");
+  }, 800);
+  
+  $("#level-title").text("Level " + level);
+  nextSequence();
+  started = true;
+}
+
+// Click handler for desktop
 $(document).click(function() {
   if (!started) {
-    // Add start game animation
-    $(".container").addClass("game-start");
-    setTimeout(function() {
-      $(".container").removeClass("game-start");
-    }, 800);
-    
-    $("#level-title").text("Level " + level);
-    nextSequence();
-    started = true;
+    startGame();
   }
 });
 
-$(".btn").click(function(event) {
-  event.stopPropagation(); 
-
-  var userChosenColour = $(this).attr("id");
-  userClickedPattern.push(userChosenColour);
-
-  playSound(userChosenColour);
-  animatePress(userChosenColour);
-
-  checkAnswer(userClickedPattern.length - 1);
+// Modify button click handler to work well on mobile
+$(".btn").on("mousedown touchstart", function(event) {
+  event.stopPropagation();
+  
+  if (started && !touchEnabled) {
+    if (event.type === "touchstart") {
+      touchEnabled = true;
+      setTimeout(function() {
+        touchEnabled = false;
+      }, 300);
+    }
+    
+    var userChosenColour = $(this).attr("id");
+    userClickedPattern.push(userChosenColour);
+  
+    playSound(userChosenColour);
+    animatePress(userChosenColour);
+  
+    checkAnswer(userClickedPattern.length - 1);
+  }
 });
 
 function checkAnswer(currentLevel) {
@@ -99,14 +143,14 @@ function nextSequence() {
   
   setTimeout(function() {
     $("#" + randomChosenColour).removeClass("flash");
-  }, 400);
+  }, 500); // Increased to 500ms for better visibility
 }
 
 function animatePress(currentColor) {
   $("#" + currentColor).addClass("pressed");
   setTimeout(function () {
     $("#" + currentColor).removeClass("pressed");
-  }, 200);
+  }, 300); // Increased to 300ms to match our new animation duration
 }
 
 function playSound(name) {

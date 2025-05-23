@@ -82,14 +82,17 @@ body {
   border: 8px solid rgba(0, 0, 0, 0.8);
   border-radius: 25%;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+  transition: all 0.15s ease-out;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6), inset 0 0 0 rgba(255, 255, 255, 0);
   position: relative;
   overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 800px;
 }
 
 .btn:hover {
   transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.8);
 }
 
 .game-over {
@@ -104,40 +107,53 @@ body {
 }
 
 .red {
-  background: linear-gradient(135deg, #ff5252, #b33939);
+  background: radial-gradient(circle at 30% 30%, #ff6b6b, #c53030);
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.4);
 }
 
 .green {
-  background: linear-gradient(135deg, #33d9b2, #218c74);
+  background: radial-gradient(circle at 30% 30%, #38d9a9, #2b8a6b);
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.4);
 }
 
 .blue {
-  background: linear-gradient(135deg, #34ace0, #227093);
+  background: radial-gradient(circle at 30% 30%, #4dabf7, #1864ab);
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.4);
 }
 
 .yellow {
-  background: linear-gradient(135deg, #ffda79, #ccae62);
+  background: radial-gradient(circle at 30% 30%, #ffd43b, #e67700);
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.4);
 }
 
 .pressed {
-  box-shadow: 0 0 30px white, inset 0 0 20px white;
-  opacity: 0.9;
-  transform: scale(0.95);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), inset 0 0 60px rgba(255, 255, 255, 0.6);
+  transform: scale(0.92) translateY(5px);
+  transition: all 0.08s ease-in;
+  filter: brightness(1.2);
+  border-color: rgba(255, 255, 255, 0.9);
+  animation: press 0.2s ease-out;
+}
+
+@keyframes press {
+  0% { transform: scale(1) translateY(0); }
+  50% { transform: scale(0.92) translateY(5px); }
+  100% { transform: scale(0.96) translateY(2px); }
 }
 
 .flash {
-  animation: buttonFlash 0.4s;
-  box-shadow: 0 0 70px white, inset 0 0 50px white;
+  animation: buttonFlash 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.8), inset 0 0 60px rgba(255, 255, 255, 0.8);
   z-index: 10;
-  transform: scale(1.15);
+  transform: scale(1.1) translateZ(20px);
   border-color: white;
-  filter: brightness(1.5);
+  filter: brightness(1.5) contrast(1.1);
 }
 
 @keyframes buttonFlash {
-  0% { transform: scale(1); box-shadow: 0 0 0 white; filter: brightness(1); }
-  50% { transform: scale(1.15); box-shadow: 0 0 70px white, inset 0 0 50px white; filter: brightness(1.5); }
-  100% { transform: scale(1); box-shadow: 0 0 0 white; filter: brightness(1); }
+  0% { transform: scale(1) translateZ(0); box-shadow: 0 0 0 rgba(255, 255, 255, 0); filter: brightness(1); }
+  40% { transform: scale(1.1) translateZ(20px); box-shadow: 0 0 40px rgba(255, 255, 255, 0.8), inset 0 0 60px rgba(255, 255, 255, 0.8); filter: brightness(1.5) contrast(1.1); }
+  100% { transform: scale(1) translateZ(0); box-shadow: 0 0 0 rgba(255, 255, 255, 0); filter: brightness(1); }
 }
 
 footer {
@@ -166,42 +182,135 @@ footer {
 @media (max-width: 768px) {
   body {
     margin: 0;
-    padding: 15px;
+    padding: 10px;
+    justify-content: flex-start;
+    padding-top: 20px;
+  }
+  
+  .game-header {
+    width: 100%;
+    padding: 0;
+    margin-bottom: 10px;
   }
   
   #level-title {
-    font-size: 1.8rem;
-    margin: 15px 0;
+    font-size: 1.6rem;
+    margin: 5px 0;
+    padding: 5px;
   }
 
   #high-score-container {
-    padding: 8px 15px;
+    padding: 5px 10px;
+    margin-bottom: 10px;
   }
 
   #high-score-label {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+    margin-bottom: 2px;
   }
 
   #high-score {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
   
   .container {
-    width: 90%;
-    padding: 15px;
+    width: 95%;
+    padding: 12px 5px;
+    margin-top: 5px;
     box-sizing: border-box;
   }
 
   .row {
     display: flex;
     justify-content: center;
+    gap: 12px;
+    margin-bottom: 12px;
   }
   
   .btn {
-    width: 120px;
-    height: 120px;
-    margin: 10px;
-    margin: 0 auto;
-    border-width: 5px;
+    width: 130px;
+    height: 130px;
+    margin: 0;
+    border-width: 4px;
+  }
+  
+  footer {
+    margin-top: 20px;
+    padding: 10px 0;
+    font-size: 14px;
+  }
+}
+
+/* Small phone specific adjustments */
+@media (max-width: 375px) {
+  #level-title {
+    font-size: 1.3rem;
+  }
+  
+  .btn {
+    width: 110px;
+    height: 110px;
+    border-width: 3px;
+  }
+  
+  .container {
+    padding: 8px 0;
+  }
+  
+  .row {
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  
+  #high-score-container {
+    padding: 4px 8px;
+  }
+  
+  #high-score {
+    font-size: 1.1rem;
+  }
+}
+
+/* Ensure content doesn't overflow on very short screens */
+@media (max-height: 640px) {
+  body {
+    padding-top: 10px;
+  }
+  
+  .game-header {
+    margin-bottom: 5px;
+  }
+  
+  .btn {
+    height: 100px;
+    width: 100px;
+  }
+  
+  #level-title {
+    margin: 0;
+  }
+  
+  footer {
+    margin-top: 10px;
+    padding: 5px 0;
+  }
+}
+
+/* Mobile-specific button adjustments */
+@media (max-width: 768px) {
+  .btn {
+    /* Reduce shadow intensity on mobile */
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.2), 0 3px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Optimize button flash effect for mobile */
+  .flash {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6), inset 0 0 30px rgba(255, 255, 255, 0.7);
+  }
+  
+  /* Improve touch feedback */
+  .pressed {
+    transform: scale(0.94);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(255, 255, 255, 0.5);
   }
 }
