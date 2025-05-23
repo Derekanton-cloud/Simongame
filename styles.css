@@ -37,6 +37,7 @@ body {
   display: inline-block;
   margin: 0 auto 20px;
   position: relative;
+  cursor: pointer; /* Make high score container look clickable */
 }
 
 #high-score-label {
@@ -178,30 +179,78 @@ footer {
   100% { transform: scale(1); opacity: 1; }
 }
 
+/* High score reset animations */
+.high-score-clicked {
+  transform: scale(0.95);
+  transition: transform 0.1s ease-in-out;
+}
+
+.high-score-reset {
+  animation: highScoreReset 1.5s ease;
+}
+
+@keyframes highScoreReset {
+  0% { transform: scale(1); background: rgba(0, 0, 0, 0.4); }
+  25% { transform: scale(1.2); background: rgba(255, 0, 0, 0.6); }
+  50% { transform: scale(0.9); background: rgba(255, 0, 0, 0.4); }
+  75% { transform: scale(1.1); background: rgba(0, 0, 0, 0.5); }
+  100% { transform: scale(1); background: rgba(0, 0, 0, 0.4); }
+}
+
+/* Animation for score updates */
+.score-updated {
+  animation: scoreUpdate 0.5s ease;
+}
+
+@keyframes scoreUpdate {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); color: #ffffff; }
+  100% { transform: scale(1); }
+}
+
+/* Root variables for viewport height fix */
+:root {
+  --vh: 1vh;
+}
+
+/* Mobile viewport height fix */
+@media (max-width: 768px) {
+  body {
+    min-height: calc(100 * var(--vh));
+  }
+  
+  .mobile-device {
+    height: calc(100 * var(--vh));
+    overflow: hidden;
+  }
+}
+
 /* Mobile-specific layout adjustments */
 @media (max-width: 768px) {
   body {
     margin: 0;
-    padding: 10px;
-    justify-content: flex-start;
-    padding-top: 20px;
+    padding: 0;
+    justify-content: space-between; /* Space elements evenly in the viewport */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
   
   .game-header {
     width: 100%;
-    padding: 0;
-    margin-bottom: 10px;
+    padding: 12px 0;
+    margin-bottom: 20px; /* Increased space between header and buttons */
   }
   
   #level-title {
     font-size: 1.6rem;
-    margin: 5px 0;
+    margin: 8px 0 12px; /* Adjusted margin */
     padding: 5px;
   }
 
   #high-score-container {
-    padding: 5px 10px;
-    margin-bottom: 10px;
+    padding: 6px 12px;
+    margin-bottom: 15px; /* Increased space below high score */
   }
 
   #high-score-label {
@@ -214,85 +263,140 @@ footer {
   }
   
   .container {
-    width: 95%;
-    padding: 12px 5px;
-    margin-top: 5px;
+    width: 90%;
+    padding: 15px 5px;
+    margin: 0 auto;
+    flex: 1; /* Allow container to take available space */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     box-sizing: border-box;
   }
 
   .row {
     display: flex;
     justify-content: center;
-    gap: 12px;
-    margin-bottom: 12px;
+    gap: 20px; /* Increased spacing between buttons */
+    margin-bottom: 20px; /* Increased spacing between rows */
   }
   
   .btn {
-    width: 130px;
-    height: 130px;
+    width: 125px;
+    height: 125px;
     margin: 0;
     border-width: 4px;
   }
   
   footer {
-    margin-top: 20px;
-    padding: 10px 0;
+    width: 100%;
+    padding: 15px 0;
     font-size: 14px;
+    margin-top: auto; /* Push to bottom */
+    background-color: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
 
 /* Small phone specific adjustments */
 @media (max-width: 375px) {
   #level-title {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
+    margin: 5px 0 10px;
   }
   
   .btn {
-    width: 110px;
-    height: 110px;
+    width: 100px;
+    height: 100px;
     border-width: 3px;
   }
   
   .container {
-    padding: 8px 0;
+    padding: 5px 0;
   }
   
   .row {
-    gap: 8px;
-    margin-bottom: 8px;
+    gap: 15px;
+    margin-bottom: 15px;
   }
   
   #high-score-container {
     padding: 4px 8px;
+    margin-bottom: 12px;
   }
   
   #high-score {
     font-size: 1.1rem;
+  }
+  
+  .game-header {
+    margin-bottom: 15px;
+  }
+  
+  footer {
+    padding: 10px 0;
   }
 }
 
 /* Ensure content doesn't overflow on very short screens */
 @media (max-height: 640px) {
   body {
-    padding-top: 10px;
+    padding: 0;
   }
   
   .game-header {
-    margin-bottom: 5px;
+    margin-bottom: 12px;
+    padding: 8px 0;
   }
   
   .btn {
-    height: 100px;
-    width: 100px;
+    height: 90px;
+    width: 90px;
+    border-width: 3px;
+  }
+  
+  .row {
+    gap: 12px;
+    margin-bottom: 12px;
   }
   
   #level-title {
-    margin: 0;
+    margin: 0 0 8px;
+    font-size: 1.2rem;
   }
   
   footer {
-    margin-top: 10px;
-    padding: 5px 0;
+    padding: 8px 0;
+    font-size: 12px;
+  }
+  
+  #high-score-container {
+    padding: 3px 8px;
+    margin-bottom: 10px;
+  }
+  
+  .container {
+    padding: 5px;
+  }
+}
+
+/* Portrait mode specific adjustments */
+@media (max-width: 768px) and (orientation: portrait) {
+  body {
+    justify-content: space-around; /* Better spacing in portrait mode */
+  }
+  
+  .game-header {
+    margin-bottom: 5vh; /* Viewport-based spacing for better proportions */
+  }
+  
+  .container {
+    flex: 0 1 auto; /* Don't stretch container in portrait mode */
+    margin-bottom: 5vh;
+  }
+  
+  /* Adjust vertical spacing in portrait mode */
+  .row {
+    margin-bottom: 4vh;
   }
 }
 
