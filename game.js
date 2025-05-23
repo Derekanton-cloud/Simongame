@@ -110,6 +110,13 @@ $(document).ready(function() {
     e.preventDefault();
   });
   
+  // Ensure touchend events are properly handled to prevent any lingering effects
+  $(".btn").on("touchend touchcancel", function(e) {
+    e.preventDefault();
+    // Make sure any visual effects are properly cleaned up
+    $(this).removeClass("pressed");
+  });
+  
   // Prevent pull-to-refresh on mobile
   $(document).on("touchmove", function(e) {
     if (started) {
@@ -161,6 +168,8 @@ $(document).click(function() {
 // Modify button click handler to work well on mobile
 $(".btn").on("mousedown touchstart", function(event) {
   event.stopPropagation();
+  // Prevent default browser behavior which might cause outline/focus issues
+  event.preventDefault();
   
   if (started && !touchEnabled) {
     if (event.type === "touchstart") {
