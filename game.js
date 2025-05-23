@@ -6,6 +6,19 @@ var userClickedPattern = [];
 
 var started = false;
 var level = 0;
+var highScore = 0;
+
+// Load the high score from localStorage when the page loads
+$(document).ready(function() {
+  if (localStorage.getItem("simonHighScore")) {
+    highScore = parseInt(localStorage.getItem("simonHighScore"));
+    updateHighScoreDisplay();
+  }
+});
+
+function updateHighScoreDisplay() {
+  $("#high-score").text("High Score: " + highScore);
+}
 
 $(document).click(function() {
   if (!started) {
@@ -42,6 +55,17 @@ function checkAnswer(currentLevel) {
     setTimeout(function () {
       $("body").removeClass("game-over");
     }, 200);
+
+    // Check if current level is a new high score
+    if (level > highScore) {
+      highScore = level;
+      localStorage.setItem("simonHighScore", highScore);
+      updateHighScoreDisplay();
+      // Show a message about the new high score
+      setTimeout(function() {
+        $("#level-title").text("New High Score: " + highScore + "!");
+      }, 1000);
+    }
 
     startOver();
   }

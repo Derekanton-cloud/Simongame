@@ -12,6 +12,13 @@ body {
   color: #FEF2BF;
 }
 
+#high-score {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #FEF2BF;
+}
+
 .container {
   display: block;
   width: 50%;
@@ -76,6 +83,11 @@ footer {
     margin: 10px 0;
   }
 
+  #high-score {
+    font-size: 1rem;
+    margin-bottom: 15px;
+  }
+  
   .container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
