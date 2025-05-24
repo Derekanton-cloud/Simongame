@@ -84,7 +84,17 @@ $(document).ready(function() {
     $("body").addClass("mobile-device");
     
     // Add touch handlers for mobile
-    $(document).on("touchstart", function() {
+    $(document).on("touchstart", function(event) {
+      // Skip touches on buttons when in restart state
+      if ($(event.target).closest('.btn').length && waitingForRestart) {
+        return;
+      }
+      
+      // Skip touches on the high score container
+      if ($(event.target).closest('#high-score-container').length) {
+        return;
+      }
+      
       if (!started && !touchEnabled) {
         touchEnabled = true;
         
@@ -139,6 +149,11 @@ function updateHighScoreDisplay() {
 
 // Start game function for both click and touch
 function startGame() {
+  // Reset game state properly
+  level = 0;
+  gamePattern = [];
+  userClickedPattern = [];
+  
   // Add start game animation
   $(".container").addClass("game-start");
   setTimeout(function() {
@@ -152,7 +167,17 @@ function startGame() {
 }
 
 // Click handler for desktop
-$(document).click(function() {
+$(document).click(function(event) {
+  // Skip clicks on buttons when in restart state - let them bubble up to document
+  if ($(event.target).closest('.btn').length && waitingForRestart) {
+    return;
+  }
+  
+  // Skip clicks on the high score container
+  if ($(event.target).closest('#high-score-container').length) {
+    return;
+  }
+  
   if (!started) {
     if (waitingForRestart) {
       // If we're waiting for a restart, reset the flag and start the game
@@ -167,9 +192,18 @@ $(document).click(function() {
 
 // Modify button click handler to work well on mobile
 $(".btn").on("mousedown touchstart", function(event) {
-  event.stopPropagation();
+  // Only stop propagation if we're in active gameplay
+  if (!waitingForRestart) {
+    event.stopPropagation();
+  }
+  
   // Prevent default browser behavior which might cause outline/focus issues
   event.preventDefault();
+  
+  // If waiting for restart, let the click bubble up to document for restart handling
+  if (waitingForRestart) {
+    return;
+  }
   
   if (started && !touchEnabled) {
     if (event.type === "touchstart") {
@@ -262,5 +296,6 @@ function startOver() {
   gamePattern = [];
   started = false;
   waitingForRestart = true; // Add a flag to indicate we're waiting for user input to restart
+  console.log("Game over - waiting for user click to restart");
 }
 
