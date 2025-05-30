@@ -438,3 +438,60 @@ footer {
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(255, 255, 255, 0.5);
   }
 }
+
+/* VS mode player scores styling */
+#player-scores {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 10px;
+}
+
+#p1-score, #p2-score {
+  font-size: 1.2rem;
+  color: #FEF2BF;
+  padding: 8px 15px;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.active-player {
+  background-color: rgba(100, 200, 255, 0.2) !important;
+  box-shadow: 0 0 15px rgba(100, 200, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Game mode selection styles */
+.mode-select {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.back-to-home {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: #FEF2BF;
+  text-decoration: none;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.back-to-home:hover {
+  opacity: 1;
+}
+
+/* Mobile adjustments for VS mode */
+@media (max-width: 768px) {
+  #player-scores {
+    gap: 20px;
+  }
+  
+  #p1-score, #p2-score {
+    font-size: 0.9rem;
+    padding: 5px 10px;
+  }
+}

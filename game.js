@@ -9,13 +9,31 @@ var level = 0;
 var highScore = 0;
 var touchEnabled = false; // Track if touch is in progress to prevent double actions
 
+// Game mode variables
+var gameMode = 'solo'; // Default mode
+var currentPlayer = 1;  // For VS mode: 1 or 2
+var player1Score = 0;
+var player2Score = 0;
+
 // Variables for high score reset feature
 var highScoreClicks = 0;
 var highScoreClickTimer = null;
 
 // Load the high score from localStorage when the page loads
 $(document).ready(function() {
-  if (localStorage.getItem("simonHighScore")) {
+  // Get the game mode from URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  gameMode = urlParams.get('mode') || 'solo';
+  
+  // Update UI based on game mode
+  if (gameMode === 'vs') {
+    $("#level-title").text("VS Mode: Player 1's Turn");
+    // Create player score displays if in VS mode
+    $(".game-header").append('<div id="player-scores"><div id="p1-score">P1: 0</div><div id="p2-score">P2: 0</div></div>');
+  }
+  
+  // Load high score for solo mode
+  if (gameMode === 'solo' && localStorage.getItem("simonHighScore")) {
     highScore = parseInt(localStorage.getItem("simonHighScore"));
     updateHighScoreDisplay();
   }
@@ -226,39 +244,108 @@ $(".btn").on("mousedown touchstart", function(event) {
 function checkAnswer(currentLevel) {
   if (gamePattern[currentLevel] === userClickedPattern[currentLevel]) {
     if (userClickedPattern.length === gamePattern.length) {
-      setTimeout(function () {
-        nextSequence();
-      }, 1500); // Increased delay to make the game more accessible
+      // Handle different behaviors based on game mode
+      if (gameMode === 'solo') {
+        setTimeout(function () {
+          nextSequence();
+        }, 1500); // Increased delay to make the game more accessible
+      } else if (gameMode === 'vs') {
+        // VS Mode: Update score for current player and switch players
+        if (currentPlayer === 1) {
+          player1Score = level;
+          updatePlayerScores();
+          currentPlayer = 2;
+          $("#level-title").text("Great! Player 2's Turn");
+        } else {
+          player2Score = level;
+          updatePlayerScores();
+          currentPlayer = 1;
+          $("#level-title").text("Great! Player 1's Turn");
+        }
+        
+        // Show who has the better score after both players have played
+        if (player1Score > 0 && player2Score > 0) {
+          if (player1Score > player2Score) {
+            $("#level-title").html("Player 1 leads: " + player1Score + "-" + player2Score + "<br>Player " + currentPlayer + "'s Turn");
+          } else if (player2Score > player1Score) {
+            $("#level-title").html("Player 2 leads: " + player2Score + "-" + player1Score + "<br>Player " + currentPlayer + "'s Turn");
+          } else {
+            $("#level-title").html("Tied: " + player1Score + "-" + player2Score + "<br>Player " + currentPlayer + "'s Turn");
+          }
+        }
+        
+        setTimeout(function () {
+          startNextVsRound();
+        }, 2000);
+      }
     }
   } else {
     playSound("wrong");
     $("body").addClass("game-over");
-    $("#level-title").text("Game Over, Click Anywhere to Restart");
+    
+    if (gameMode === 'solo') {
+      $("#level-title").text("Game Over, Click Anywhere to Restart");
+      
+      setTimeout(function () {
+        $("body").removeClass("game-over");
+      }, 200);
 
-    setTimeout(function () {
-      $("body").removeClass("game-over");
-    }, 200);
-
-    // Check if current level is a new high score
-    if (level > highScore) {
-      highScore = level;
-      localStorage.setItem("simonHighScore", highScore);
-      
-      // Animate high score container
-      $("#high-score-container").addClass("high-score-update");
-      setTimeout(function() {
-        $("#high-score-container").removeClass("high-score-update");
-      }, 1500);
-      
-      updateHighScoreDisplay();
-      
-      // Show a message about the new high score
-      setTimeout(function() {
-        $("#level-title").text("New High Score: " + highScore + "! Click to Play Again");
-      }, 1000);
+      // Check if current level is a new high score
+      if (level > highScore) {
+        highScore = level;
+        localStorage.setItem("simonHighScore", highScore);
+        
+        // Animate high score container
+        $("#high-score-container").addClass("high-score-update");
+        setTimeout(function() {
+          $("#high-score-container").removeClass("high-score-update");
+        }, 1500);
+        
+        updateHighScoreDisplay();
+        
+        // Show a message about the new high score
+        setTimeout(function() {
+          $("#level-title").text("New High Score: " + highScore + "! Click to Play Again");
+        }, 1000);
+      }
+    } else if (gameMode === 'vs') {
+      // For VS mode, record the score and switch players
+      if (currentPlayer === 1) {
+        player1Score = level - 1; // Last successful level
+        updatePlayerScores();
+        currentPlayer = 2;
+        setTimeout(function() {
+          $("#level-title").text("Player 1 scored " + player1Score + ". Player 2's Turn");
+          $("body").removeClass("game-over");
+          setTimeout(function() {
+            startNextVsRound();
+          }, 1500);
+        }, 1000);
+      } else {
+        player2Score = level - 1; // Last successful level
+        updatePlayerScores();
+        
+        // Determine the winner
+        let resultMessage = "";
+        if (player1Score > player2Score) {
+          resultMessage = "Player 1 wins: " + player1Score + "-" + player2Score + "!";
+        } else if (player2Score > player1Score) {
+          resultMessage = "Player 2 wins: " + player2Score + "-" + player1Score + "!";
+        } else {
+          resultMessage = "It's a tie: " + player1Score + "-" + player2Score + "!";
+        }
+        
+        $("#level-title").text(resultMessage + " Click to Play Again");
+        setTimeout(function() {
+          $("body").removeClass("game-over");
+        }, 200);
+        
+        // Reset for a new game
+        startOver();
+      }
+    } else {
+      startOver(); // Default behavior
     }
-
-    startOver(); // This sets waitingForRestart = true
   }
 }
 
@@ -295,7 +382,44 @@ function startOver() {
   level = 0;
   gamePattern = [];
   started = false;
-  waitingForRestart = true; // Add a flag to indicate we're waiting for user input to restart
+  waitingForRestart = true; // Add a flag to indicate we're waiting for user click to restart
   console.log("Game over - waiting for user click to restart");
+  
+  // If in VS mode, reset player-specific variables
+  if (gameMode === 'vs') {
+    player1Score = 0;
+    player2Score = 0;
+    currentPlayer = 1;
+    updatePlayerScores();
+  }
+}
+
+// Function to update player scores in VS mode
+function updatePlayerScores() {
+  if (gameMode === 'vs') {
+    $("#p1-score").text("P1: " + player1Score);
+    $("#p2-score").text("P2: " + player2Score);
+    
+    // Highlight current player
+    if (currentPlayer === 1) {
+      $("#p1-score").addClass("active-player");
+      $("#p2-score").removeClass("active-player");
+    } else {
+      $("#p2-score").addClass("active-player");
+      $("#p1-score").removeClass("active-player");
+    }
+  }
+}
+
+// Start a new round in VS mode
+function startNextVsRound() {
+  userClickedPattern = [];
+  gamePattern = [];
+  level = 0;
+  started = true;
+  waitingForRestart = false;
+  $("#level-title").text("Player " + currentPlayer + "'s Turn");
+  updatePlayerScores();
+  nextSequence();
 }
 
