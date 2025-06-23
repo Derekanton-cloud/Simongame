@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Simon Game - Home</title>  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="home-styles.css?v=3">
+  <link rel="stylesheet" href="modal-styles.css?v=3">
+  <link rel="stylesheet" href="player-positions.css?v=3">
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  <!-- Added favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
+</head>
+
+<body class="home-page">
+  <!-- Floating Symbols -->
+  <div class="floating-symbols">
+    <div class="symbol symbol-1"></div>
+    <div class="symbol symbol-2"></div>
+    <div class="symbol symbol-3"></div>
+    <div class="symbol symbol-4"></div>
+    <div class="symbol symbol-5"></div>
+    <div class="symbol symbol-6"></div>
+    <div class="symbol symbol-circle-1"></div>
+    <div class="symbol symbol-circle-2"></div>
+  </div>
+  <div class="home-container">    <div class="game-title">
+      <h1>Simon Game</h1>
+      <div class="title-glow"></div>
+    </div>
+
+    <div class="home-footer">
+      <p>Choose your game mode</p>
+      <div class="pulsing-arrow">▼</div>
+    </div>
+
+    <div class="game-options">
+      <a href="index.html?mode=solo" class="game-option solo">
+        <div class="option-content">
+          <div class="option-icon">
+            <div class="simon-mini">
+              <div class="mini-btn mini-green"></div>
+              <div class="mini-btn mini-red"></div>
+              <div class="mini-btn mini-yellow"></div>
+              <div class="mini-btn mini-blue"></div>
+            </div>
+          </div>
+          <h2>SOLO PLAY</h2>
+          <p>Classic Simon gameplay - test your memory!</p>
+        </div>
+        <div class="option-hover-effect"></div>
+      </a>      <a href="#" class="game-option vs-mode" id="vs-option">
+        <div class="option-content">
+          <div class="option-icon">
+            <div class="vs-icon">
+              <div class="player player-1">P1</div>
+              <div class="vs">VS</div>
+              <div class="player player-2">P2</div>
+            </div>
+          </div>
+          <h2>VS PLAYERS</h2>
+          <p>Challenge your friends in turn-based mode!</p>
+        </div>
+        <div class="option-hover-effect"></div>
+      </a>    </div>  </div>  <!-- VS Mode Modal -->
+  <div id="vs-modal" class="modal">
+    <div class="modal-content">
+      <!-- Modal Background Elements -->
+      <div class="modal-symbol symbol-1"></div>
+      <div class="modal-symbol symbol-2"></div>
+      <div class="modal-symbol symbol-3"></div>
+      <div class="modal-symbol symbol-4"></div>
+      <div class="modal-symbol symbol-5"></div>
+      <div class="modal-symbol symbol-6"></div>
+        <!-- Modal Header -->      <div class="modal-header">
+        <h2><span class="battle-icon"><i class="battle-swords"></i></span> Choose Your Battle!</h2>
+        <span class="close-modal">&times;</span>
+      </div>
+      
+      <!-- Modal Options -->
+      <div class="modal-options">        <!-- 1v1 Option -->
+        <a href="index.html?mode=vs&players=2" class="modal-option">
+          <div class="modal-option-icon duo">
+            <div class="player-icon p1">P1</div>
+            <div class="vs-text">VS</div>
+            <div class="player-icon p2">P2</div>
+          </div>
+          <div class="modal-option-header">
+            <h3 class="option-title">1v1 Duel</h3>
+            <p class="option-subtitle">Classic head-to-head battle</p>
+          </div>
+        </a>
+          <!-- Triple-Threat Option -->
+        <a href="index.html?mode=vs&players=3" class="modal-option">
+          <div class="modal-option-icon trio">
+            <div class="player-icon p1">P1</div>
+            <div class="player-icon p2">P2</div>
+            <div class="player-icon p3">P3</div>
+            <div class="triangle-connector"></div>
+          </div>
+          <div class="modal-option-header">
+            <h3 class="option-title">Triple-Threat</h3>
+            <p class="option-subtitle">Three-way challenge</p>
+          </div>
+        </a>
+          <!-- Fatal 4-Way Option -->
+        <a href="index.html?mode=vs&players=4" class="modal-option">
+          <div class="modal-option-icon quad">
+            <div class="player-icon p1">P1</div>
+            <div class="player-icon p2">P2</div>
+            <div class="player-icon p3">P3</div>
+            <div class="player-icon p4">P4</div>
+            <div class="quad-connector"></div>
+          </div>
+          <div class="modal-option-header">
+            <h3 class="option-title">Fatal 4-Way</h3>
+            <p class="option-subtitle">Four-player showdown</p>
+          </div>
+        </a>
+          <!-- 5 Players Option -->
+        <a href="index.html?mode=vs&players=5" class="modal-option">
+          <div class="modal-option-icon penta">
+            <div class="player-icon p1">P1</div>
+            <div class="player-icon p2">P2</div>
+            <div class="player-icon p3">P3</div>
+            <div class="player-icon p4">P4</div>
+            <div class="player-icon p5">P5</div>
+            <div class="penta-connector"></div>
+          </div>
+          <div class="modal-option-header">
+            <h3 class="option-title">Pentagonal Panic</h3>
+            <p class="option-subtitle">Five-player memory mayhem</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>  <script src="home.js"></script>
+  <script src="modal-patch.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,562 @@
+/* VS Mode Specific Styles */
+:root {
+  --primary-color: #011F3F;
+  --accent-color: #FEF2BF;
+  --glow-color: rgba(100, 200, 255, 0.7);
+  --green-color: #38d9a9;
+  --red-color: #ff6b6b;
+  --yellow-color: #ffd43b;
+  --blue-color: #4dabf7;
+  --purple-color: #cc5de8;
+}
+
+/* VS Mode Body Styling */
+body.vs-mode {
+  background-color: var(--primary-color);
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(0, 40, 100, 0.8) 0%, transparent 25%),
+    radial-gradient(circle at 80% 20%, rgba(0, 60, 120, 0.6) 0%, transparent 30%);
+  overflow: hidden;
+  position: relative;
+  transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* VS Mode loading effect */
+body.vs-mode-loading {
+  filter: blur(5px) brightness(0.5);
+  transform: scale(0.98);
+}
+
+/* Game container entrance animation */
+body.vs-mode .container {
+  animation: container-entrance 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes container-entrance {
+  from {
+    transform: translateY(20px) scale(0.95);
+    opacity: 0.5;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Floating symbols for VS mode */
+.vs-mode-symbols {
+  opacity: 0.5;
+  z-index: -1;
+}
+
+.vs-mode-symbols .symbol {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  filter: blur(2px);
+  animation: float 20s infinite alternate ease-in-out;
+}
+
+.symbol-1 {
+  width: 80px;
+  height: 80px;
+  top: 10%;
+  left: 10%;
+  animation-delay: -2s !important;
+}
+
+.symbol-2 {
+  width: 60px;
+  height: 60px;
+  top: 20%;
+  right: 15%;
+  animation-delay: -5s !important;
+}
+
+.symbol-3 {
+  width: 40px;
+  height: 40px;
+  bottom: 15%;
+  left: 20%;
+  animation-delay: -8s !important;
+}
+
+.symbol-4 {
+  width: 70px;
+  height: 70px;
+  bottom: 20%;
+  right: 10%;
+  animation-delay: -12s !important;
+}
+
+.symbol-5 {
+  width: 50px;
+  height: 50px;
+  top: 50%;
+  left: 5%;
+  animation-delay: -15s !important;
+}
+
+.symbol-6 {
+  width: 90px;
+  height: 90px;
+  top: 40%;
+  right: 5%;
+  animation-delay: -18s !important;
+}
+
+.symbol-circle-1 {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  bottom: -50px;
+  left: 15%;
+  animation: rotate 30s infinite linear;
+}
+
+.symbol-circle-2 {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 3px solid rgba(100, 200, 255, 0.1);
+  top: -80px;
+  right: 10%;
+  animation: rotate-reverse 40s infinite linear;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(20px) translateX(10px);
+  }
+  100% {
+    transform: translateY(-20px) translateX(-10px);
+  }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes rotate-reverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+/* Player score indicators */
+#player-scores {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 12px;
+  padding: 0 15px;
+  animation: fade-in-down 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.player-score {
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 10px 20px;
+  color: #FEF2BF;
+  font-size: 0.85rem;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  min-width: 110px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+@keyframes fade-in-down {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.player-score.active-player {
+  border-color: var(--player-color, #FEF2BF);
+  background-color: rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 15px var(--player-color, rgba(100, 200, 255, 0.7)),
+              inset 0 0 8px var(--player-color, rgba(100, 200, 255, 0.4));
+  transform: translateY(-5px) scale(1.05);
+  z-index: 10;
+  animation: pulse-glow 2s infinite;
+}
+
+.player-score.eliminated {
+  opacity: 0.4;
+  text-decoration: line-through;
+  border-color: rgba(255, 60, 60, 0.5);
+  background-color: rgba(60, 0, 0, 0.3);
+  transform: scale(0.95);
+  filter: grayscale(0.8);
+}
+
+/* VS Mode Container and Button Styling */
+body.vs-mode-active .container {
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.15),
+              inset 0 0 10px rgba(255, 255, 255, 0.05);
+}
+
+.container.vs-mode-pulse {
+  animation: container-pulse 0.6s ease-out;
+}
+
+/* Player-specific colors */
+body.player1-turn {
+  --player-color: rgb(255, 107, 107);
+}
+
+body.player1-turn .container {
+  box-shadow: 0 0 40px rgba(255, 107, 107, 0.2),
+              inset 0 0 15px rgba(255, 107, 107, 0.1);
+}
+
+body.player2-turn {
+  --player-color: rgb(77, 171, 247);
+}
+
+body.player2-turn .container {
+  box-shadow: 0 0 40px rgba(77, 171, 247, 0.2),
+              inset 0 0 15px rgba(77, 171, 247, 0.1);
+}
+
+body.player3-turn {
+  --player-color: rgb(255, 212, 59);
+}
+
+body.player3-turn .container {
+  box-shadow: 0 0 40px rgba(255, 212, 59, 0.2),
+              inset 0 0 15px rgba(255, 212, 59, 0.1);
+}
+
+body.player4-turn {
+  --player-color: rgb(56, 217, 169);
+}
+
+body.player4-turn .container {
+  box-shadow: 0 0 40px rgba(56, 217, 169, 0.2),
+              inset 0 0 15px rgba(56, 217, 169, 0.1);
+}
+
+body.player5-turn {
+  --player-color: rgb(204, 93, 232);
+}
+
+body.player5-turn .container {
+  box-shadow: 0 0 40px rgba(204, 93, 232, 0.2),
+              inset 0 0 15px rgba(204, 93, 232, 0.1);
+}
+
+/* VS Mode animations */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px var(--player-color, rgba(100, 200, 255, 0.5)),
+                inset 0 0 8px var(--player-color, rgba(100, 200, 255, 0.3));
+  }
+  50% {
+    box-shadow: 0 0 25px var(--player-color, rgba(100, 200, 255, 0.8)),
+                inset 0 0 12px var(--player-color, rgba(100, 200, 255, 0.5));
+  }
+}
+
+@keyframes container-pulse {
+  0% {
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.15),
+                inset 0 0 10px rgba(255, 255, 255, 0.05);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 50px var(--player-color, rgba(255, 255, 255, 0.35)),
+                inset 0 0 20px var(--player-color, rgba(255, 255, 255, 0.1));
+    transform: scale(1.02);
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.15),
+                inset 0 0 10px rgba(255, 255, 255, 0.05);
+    transform: scale(1);
+  }
+}
+
+/* VS mode confetti for winners */
+.confetti {
+  position: absolute;
+  z-index: 100;
+  pointer-events: none;
+  transform-origin: center;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0) rotate(0deg) translateX(0);
+    opacity: 1;
+  }
+  25% {
+    transform: translateY(25vh) rotate(180deg) translateX(20px);
+  }
+  50% {
+    transform: translateY(50vh) rotate(360deg) translateX(-20px);
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(75vh) rotate(540deg) translateX(10px);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(105vh) rotate(720deg) translateX(0);
+    opacity: 0;
+  }
+}
+
+/* Trophy animation */
+@keyframes trophy-appear {
+  0% {
+    transform: translate(-50%, -50%) scale(0) rotate(-45deg);
+    opacity: 0;
+  }
+  40% {
+    transform: translate(-50%, -50%) scale(1.3) rotate(15deg);
+    opacity: 1;
+  }
+  60% {
+    transform: translate(-50%, -50%) scale(1) rotate(-5deg);
+  }
+  80% {
+    transform: translate(-50%, -50%) scale(1.1) rotate(5deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1) rotate(0);
+    opacity: 0;
+  }
+}
+
+/* VS Mode Button Enhancements */
+body.vs-mode .btn {
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4),
+              inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+body.vs-mode .btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5),
+              inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+body.vs-mode .btn:active {
+  transform: translateY(1px);
+  filter: brightness(0.95);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5),
+              inset 0 0 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Enhanced VS Mode Button Flashing */
+.btn.flash {
+  animation: vs-button-flash 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes vs-button-flash {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.8),
+                inset 0 0 20px rgba(255, 255, 255, 0.5);
+    filter: brightness(1.3);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+}
+
+/* Player elimination effect */
+body.player-eliminated {
+  animation: elimination-flash 1.2s;
+}
+
+@keyframes elimination-flash {
+  0%, 100% {
+    background-color: var(--primary-color);
+  }
+  25%, 75% {
+    background-color: rgba(80, 0, 0, 0.5);
+  }
+  50% {
+    background-color: rgba(120, 0, 0, 0.7);
+  }
+}
+
+/* VS Mode title styling */
+.vs-mode-title {
+  position: relative;
+  display: inline-block;
+  border-bottom: 3px solid var(--player-color, rgba(255, 255, 255, 0.5));
+  padding-bottom: 12px;
+  color: white;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  transition: all 0.4s ease;
+  animation: title-glow 3s infinite alternate;
+}
+
+body.vs-mode #level-title {
+  font-size: 2.2rem;
+  letter-spacing: 1px;
+  background-image: linear-gradient(180deg, white, #FEF2BF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
+}
+
+@keyframes title-glow {
+  from {
+    text-shadow: 0 0 5px var(--player-color, rgba(255, 255, 255, 0.2)),
+                 0 0 10px var(--player-color, rgba(255, 255, 255, 0.1));
+  }
+  to {
+    text-shadow: 0 0 10px var(--player-color, rgba(255, 255, 255, 0.4)),
+                 0 0 20px var(--player-color, rgba(255, 255, 255, 0.2)),
+                 0 0 30px var(--player-color, rgba(255, 255, 255, 0.1));
+  }
+}
+
+/* Victory styling */
+.victory-title {
+  font-size: 1.2em;
+  border-bottom: 3px solid gold;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+  animation: title-shine 2s infinite;
+}
+
+.winner-message {
+  font-size: 0.9em !important;
+  color: white !important;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.7) !important;
+  margin: 15px 0 !important;
+}
+
+.player-score.winner-player {
+  transform: scale(1.1);
+  border: 3px solid gold;
+  background: linear-gradient(45deg, rgba(50, 50, 0, 0.8), rgba(100, 100, 0, 0.5));
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.7),
+              inset 0 0 10px rgba(255, 215, 0, 0.5);
+  animation: winner-pulse 2s infinite;
+}
+
+.victory-glow {
+  box-shadow: 0 0 40px rgba(255, 215, 0, 0.4),
+              inset 0 0 20px rgba(255, 215, 0, 0.2) !important;
+  animation: victory-pulse 2s infinite !important;
+}
+
+@keyframes title-shine {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.9),
+                 0 0 30px rgba(255, 215, 0, 0.5);
+  }
+}
+
+@keyframes winner-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5),
+                inset 0 0 10px rgba(255, 215, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.9),
+                inset 0 0 15px rgba(255, 215, 0, 0.7);
+  }
+}
+
+@keyframes victory-pulse {
+  0%, 100% {
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.3),
+                inset 0 0 10px rgba(255, 215, 0, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.6),
+                inset 0 0 20px rgba(255, 215, 0, 0.3);
+  }
+}
+
+/* Winner player body classes */
+body.winner-player1 {
+  --player-color: rgb(255, 107, 107);
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(100, 20, 20, 0.5) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(150, 40, 40, 0.3) 0%, transparent 30%);
+}
+
+body.winner-player2 {
+  --player-color: rgb(77, 171, 247);
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(20, 60, 140, 0.5) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(40, 80, 160, 0.3) 0%, transparent 30%);
+}
+
+body.winner-player3 {
+  --player-color: rgb(255, 212, 59);
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(150, 120, 20, 0.5) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(180, 150, 30, 0.3) 0%, transparent 30%);
+}
+
+body.winner-player4 {
+  --player-color: rgb(56, 217, 169);
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(20, 120, 80, 0.5) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(30, 150, 100, 0.3) 0%, transparent 30%);
+}
+
+body.winner-player5 {
+  --player-color: rgb(204, 93, 232);
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(120, 40, 140, 0.5) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(150, 60, 170, 0.3) 0%, transparent 30%);
+}
+
+.vs-mode-subtitle {
+  font-size: 0.8em;
+  margin-top: 10px;
+  color: #FEF2BF;
+  opacity: 0.9;
+  display: block;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Back to home link styling */
+body.vs-mode .back-to-home {
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 8px 12px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  color: white;
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+body.vs-mode .back-to-home:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  transform: translateY(-2px);
+}

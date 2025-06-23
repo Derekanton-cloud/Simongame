@@ -458,3 +458,390 @@
     font-size: 1rem;
   }
 }
+
+/* Modal Styles */
+:root {
+  --purple-color: #cc5de8;
+  --orange-color: #fd7e14;
+  --teal-color: #20c997;
+  --cyan-color: #15aabf;
+  --pink-color: #f06595;
+  --modal-bg: rgba(0, 15, 30, 0.95);
+  --modal-border: rgba(100, 200, 255, 0.3);
+}
+
+/* Modal Floating Symbols */
+.modal-symbol {
+  position: absolute;
+  filter: blur(1px);
+  pointer-events: none;
+  z-index: 0;
+  animation: float 15s infinite ease-in-out;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh; /* Use viewport height for better mobile compatibility */
+  background-color: rgba(0, 0, 0, 0.85);
+  z-index: 9999; /* Increased z-index to ensure it appears on top */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* For Safari support */
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto; /* Ensure click events work */
+  touch-action: auto; /* Ensure touch events work on mobile */
+}
+
+.modal-content {
+  position: relative;
+  width: 90%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background-color: var(--modal-bg);
+  border-radius: 20px;
+  border: 2px solid var(--modal-border);
+  box-shadow: 0 0 30px rgba(0, 100, 200, 0.3),
+              0 0 60px rgba(0, 50, 100, 0.2) inset;
+  padding: 30px;
+  animation: modalAppear 0.5s ease-out forwards;
+  color: var(--accent-color);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  z-index: 10000; /* Ensure it's above the modal backdrop */
+  pointer-events: auto; /* Ensure click events work */
+  touch-action: auto; /* For mobile touch support */
+}
+
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid rgba(254, 242, 191, 0.2);
+  padding-bottom: 15px;
+  position: relative;
+}
+
+.modal-header::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    var(--glow-color) 50%,
+    transparent 100%);
+  filter: blur(3px);
+}
+
+.modal-header h2 {
+  font-size: 2.2rem;
+  color: var(--accent-color);
+  margin: 0;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.close-modal {
+  font-size: 2.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.close-modal:hover {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: rotate(90deg);
+}
+
+.modal-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 25px;
+}
+
+.modal-option {
+  background-color: rgba(0, 30, 60, 0.4);
+  border: 2px solid rgba(254, 242, 191, 0.1);
+  border-radius: 15px;
+  padding: 25px 20px;
+  text-align: center;
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+  overflow: hidden;
+}
+
+.modal-option::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, 
+              rgba(100, 200, 255, 0.05) 0%, 
+              transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.modal-option:hover {
+  transform: translateY(-5px);
+  border-color: rgba(254, 242, 191, 0.3);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-option:hover::before {
+  opacity: 1;
+}
+
+.modal-option-icon {
+  height: 100px;
+  width: 100px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  z-index: 2;
+}
+
+.modal-option h3 {
+  font-size: 1.5rem;
+  margin: 0;
+  position: relative;
+  z-index: 2;
+  letter-spacing: 1px;
+}
+
+.modal-option p {
+  font-size: 0.85rem;
+  margin: 0;
+  position: relative;
+  z-index: 2;
+  opacity: 0.8;
+}
+
+/* Player Icon Styles */
+.player-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+  position: absolute;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.modal-option:hover .player-icon {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+/* 1v1 Layout */
+.duo .p1 {
+  background: radial-gradient(circle at 30% 30%, var(--red-color), #c53030);
+  left: 10px;
+}
+
+.duo .p2 {
+  background: radial-gradient(circle at 30% 30%, var(--blue-color), #1864ab);
+  right: 10px;
+}
+
+.vs-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--accent-color);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Triple-Threat Layout */
+.trio .p1 {
+  background: radial-gradient(circle at 30% 30%, var(--red-color), #c53030);
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.trio .p2 {
+  background: radial-gradient(circle at 30% 30%, var(--blue-color), #1864ab);
+  bottom: 10px;
+  left: 10px;
+}
+
+.trio .p3 {
+  background: radial-gradient(circle at 30% 30%, var(--yellow-color), #e67700);
+  bottom: 10px;
+  right: 10px;
+}
+
+.triangle-connector {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  transition: all 0.3s ease;
+}
+
+.modal-option:hover .triangle-connector {
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Fatal 4-Way Layout */
+.quad .player-icon {
+  width: 30px;
+  height: 30px;
+  font-size: 0.7rem;
+}
+
+.quad .p1 {
+  background: radial-gradient(circle at 30% 30%, var(--red-color), #c53030);
+  top: 10px;
+  left: 10px;
+}
+
+.quad .p2 {
+  background: radial-gradient(circle at 30% 30%, var(--blue-color), #1864ab);
+  top: 10px;
+  right: 10px;
+}
+
+.quad .p3 {
+  background: radial-gradient(circle at 30% 30%, var(--yellow-color), #e67700);
+  bottom: 10px;
+  right: 10px;
+}
+
+.quad .p4 {
+  background: radial-gradient(circle at 30% 30%, var(--green-color), #2b8a6b);
+  bottom: 10px;
+  left: 10px;
+}
+
+.quad-connector {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  transition: all 0.3s ease;
+}
+
+.modal-option:hover .quad-connector {
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Pentagonal Panic Layout */
+.penta .player-icon {
+  width: 26px;
+  height: 26px;
+  font-size: 0.65rem;
+}
+
+.penta .p1 {
+  background: radial-gradient(circle at 30% 30%, var(--red-color), #c53030);
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.penta .p2 {
+  background: radial-gradient(circle at 30% 30%, var(--blue-color), #1864ab);
+  top: 30%;
+  right: 5px;
+}
+
+.penta .p3 {
+  background: radial-gradient(circle at 30% 30%, var(--yellow-color), #e67700);
+  bottom: 10px;
+  right: 25%;
+}
+
+.penta .p4 {
+  background: radial-gradient(circle at 30% 30%, var(--green-color), #2b8a6b);
+  bottom: 10px;
+  left: 25%;
+}
+
+.penta .p5 {
+  background: radial-gradient(circle at 30% 30%, var(--purple-color), #9c36b5);
+  top: 30%;
+  left: 5px;
+}
+
+.penta-connector {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  transition: all 0.3s ease;
+}
+
+.modal-option:hover .penta-connector {
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Mobile Styles for Modal */
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 20px;
+  }
+  
+  .modal-header h2 {
+    font-size: 1.8rem;
+  }
+  
+  .modal-options {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-option {
+    padding: 20px 15px;
+  }
+  
+  .modal-option h3 {
+    font-size: 1.3rem;
+  }
+}

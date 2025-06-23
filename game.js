@@ -11,9 +11,10 @@ var touchEnabled = false; // Track if touch is in progress to prevent double act
 
 // Game mode variables
 var gameMode = 'solo'; // Default mode
-var currentPlayer = 1;  // For VS mode: 1 or 2
-var player1Score = 0;
-var player2Score = 0;
+var currentPlayer = 1;  // For VS mode: starts with player 1
+var activePlayers = [true, true, true, true, true, true]; // Active players in VS mode (index 0 not used)
+var totalPlayers = 2;  // Default number of players for VS mode
+var remainingPlayers = 0; // Count of players still in the game
 
 // Variables for high score reset feature
 var highScoreClicks = 0;
@@ -25,11 +26,73 @@ $(document).ready(function() {
   const urlParams = new URLSearchParams(window.location.search);
   gameMode = urlParams.get('mode') || 'solo';
   
-  // Update UI based on game mode
+  // Get number of players if in VS mode
   if (gameMode === 'vs') {
-    $("#level-title").text("VS Mode: Player 1's Turn");
-    // Create player score displays if in VS mode
-    $(".game-header").append('<div id="player-scores"><div id="p1-score">P1: 0</div><div id="p2-score">P2: 0</div></div>');
+    const players = parseInt(urlParams.get('players')) || 2;
+    totalPlayers = Math.min(Math.max(players, 2), 5); // Ensure between 2-5 players
+    
+    // Initialize all players as active
+    for (let i = 1; i <= totalPlayers; i++) {
+      activePlayers[i] = true;
+    }
+    remainingPlayers = totalPlayers;
+    
+    // Add loading class to body for transition effect
+    $("body").addClass("vs-mode-loading");
+    
+    // Update UI based on game mode
+    $("#level-title").text("Click On Screen To Start");
+    
+    // Hide high score container (only for solo play)
+    $("#high-score-container").hide();
+    
+    // Add VS mode class to body
+    $("body").addClass("vs-mode");
+    
+    // Add player count specific class for CSS targeting
+    $("body").addClass(`players-${totalPlayers}`);
+    
+    // Create player status displays for VS mode with enhanced visibility
+    let playerStatusHTML = '<div id="player-scores">';
+    // Player color schemes for better visibility
+    const playerColors = [
+      "", // Not used (index 0)
+      "rgb(255, 107, 107)", // Player 1 - Red
+      "rgb(77, 171, 247)",  // Player 2 - Blue
+      "rgb(255, 212, 59)",  // Player 3 - Yellow
+      "rgb(56, 217, 169)",  // Player 4 - Green
+      "rgb(204, 93, 232)"   // Player 5 - Purple
+    ];
+    
+    for (let i = 1; i <= totalPlayers; i++) {
+      playerStatusHTML += `<div id="p${i}-score" class="player-score${i === currentPlayer ? ' active-player' : ''}" 
+        style="--player-color: ${playerColors[i]};">
+        <strong>Player ${i}</strong>
+      </div>`;
+    }
+    playerStatusHTML += '</div>';
+    $(".game-header").append(playerStatusHTML);
+    
+    // Remove loading class after a delay to create smooth transition
+    setTimeout(() => {
+      $("body").removeClass("vs-mode-loading");
+    }, 800);
+    
+    // Add VS mode styling to level title
+    $("#level-title").addClass("vs-mode-title");
+  } else {
+    // Solo mode - apply same styling as VS mode
+    $("body").addClass("vs-mode solo-mode");
+    
+    // Change title to SOLO PLAY
+    $(".vs-main-title").text("SOLO PLAY");
+    
+    // Show high score container for solo mode
+    $("#high-score-container").show();
+    
+    // Update UI for solo mode
+    $("#level-title").text("Click On Screen To Start");
+    $("#level-title").addClass("vs-mode-title");
   }
   
   // Load high score for solo mode
@@ -178,7 +241,42 @@ function startGame() {
     $(".container").removeClass("game-start");
   }, 800);
   
-  $("#level-title").text("Level " + level);
+  if (gameMode === 'vs') {
+    // Reset player statuses for a new game
+    for (let i = 1; i <= totalPlayers; i++) {
+      activePlayers[i] = true;
+    }
+    remainingPlayers = totalPlayers;
+    currentPlayer = 1;
+    
+    // Clear any winner classes
+    $("body").removeClass(function(index, className) {
+      return (className.match(/(^|\s)winner-player\S+/g) || []).join(' ');
+    });
+    $(".container").removeClass("victory-glow");
+    
+    // Set up VS mode display with enhanced styling
+    $("#level-title").html(`
+      <div class="vs-mode-title">VS Mode</div>
+    `);
+    
+    // Apply fade-in effect to title
+    $("#level-title").css("opacity", "0").addClass("vs-mode-title");
+    setTimeout(() => {
+      $("#level-title").css({
+        "opacity": "1",
+        "transform": "translateY(0)"
+      });
+    }, 100);
+    
+    // Update player statuses and VS mode visuals
+    updatePlayerStatuses();
+    updateVsModeVisuals();
+  } else {
+    // Solo mode
+    $("#level-title").text("Level " + level);
+  }
+  
   nextSequence();
   started = true;
   waitingForRestart = false; // Ensure the flag is reset when game starts
@@ -223,6 +321,14 @@ $(".btn").on("mousedown touchstart", function(event) {
     return;
   }
   
+  // Always provide visual and audio feedback for button presses
+  var userChosenColour = $(this).attr("id");
+  
+  // Always animate and play sound for user feedback
+  playSound(userChosenColour);
+  animatePress(userChosenColour);
+  
+  // Only process game logic if the game has started
   if (started && !touchEnabled) {
     if (event.type === "touchstart") {
       touchEnabled = true;
@@ -231,59 +337,60 @@ $(".btn").on("mousedown touchstart", function(event) {
       }, 300);
     }
     
-    var userChosenColour = $(this).attr("id");
     userClickedPattern.push(userChosenColour);
-  
-    playSound(userChosenColour);
-    animatePress(userChosenColour);
-  
     checkAnswer(userClickedPattern.length - 1);
   }
 });
 
 function checkAnswer(currentLevel) {
   if (gamePattern[currentLevel] === userClickedPattern[currentLevel]) {
+    // Correct button clicked
     if (userClickedPattern.length === gamePattern.length) {
-      // Handle different behaviors based on game mode
+      // Sequence completed successfully
+      
       if (gameMode === 'solo') {
+        // Solo mode - add a new color to pattern
         setTimeout(function () {
           nextSequence();
         }, 1500); // Increased delay to make the game more accessible
-      } else if (gameMode === 'vs') {
-        // VS Mode: Update score for current player and switch players
-        if (currentPlayer === 1) {
-          player1Score = level;
-          updatePlayerScores();
-          currentPlayer = 2;
-          $("#level-title").text("Great! Player 2's Turn");
-        } else {
-          player2Score = level;
-          updatePlayerScores();
-          currentPlayer = 1;
-          $("#level-title").text("Great! Player 1's Turn");
+      } 
+      else if (gameMode === 'vs') {
+        // VS Mode - current player succeeded, now move to next player
+        // Find next active player
+        let nextPlayer = findNextActivePlayer(currentPlayer);
+        
+        if (nextPlayer === currentPlayer) {
+          // If we've gone full circle back to same player, it means they're the only one left
+          // Declare them the winner
+          declareVsModeWinner([currentPlayer]);
+          return;
         }
         
-        // Show who has the better score after both players have played
-        if (player1Score > 0 && player2Score > 0) {
-          if (player1Score > player2Score) {
-            $("#level-title").html("Player 1 leads: " + player1Score + "-" + player2Score + "<br>Player " + currentPlayer + "'s Turn");
-          } else if (player2Score > player1Score) {
-            $("#level-title").html("Player 2 leads: " + player2Score + "-" + player1Score + "<br>Player " + currentPlayer + "'s Turn");
-          } else {
-            $("#level-title").html("Tied: " + player1Score + "-" + player2Score + "<br>Player " + currentPlayer + "'s Turn");
-          }
-        }
-        
-        setTimeout(function () {
-          startNextVsRound();
-        }, 2000);
+        // Move to next player and add a new color for them
+        setTimeout(function() {
+          // No success message display
+          
+          currentPlayer = nextPlayer;
+          updatePlayerStatuses();
+          updateVsModeVisuals();
+          
+          // Clear current player's pattern
+          userClickedPattern = [];
+          
+          // Add new color for the next player's turn
+          setTimeout(function() {
+            addNewColorForCurrentPlayer();
+          }, 1500);
+        }, 1000);
       }
     }
   } else {
+    // Wrong button clicked
     playSound("wrong");
     $("body").addClass("game-over");
     
     if (gameMode === 'solo') {
+      // Solo mode game over
       $("#level-title").text("Game Over, Click Anywhere to Restart");
       
       setTimeout(function () {
@@ -308,68 +415,156 @@ function checkAnswer(currentLevel) {
           $("#level-title").text("New High Score: " + highScore + "! Click to Play Again");
         }, 1000);
       }
-    } else if (gameMode === 'vs') {
-      // For VS mode, record the score and switch players
-      if (currentPlayer === 1) {
-        player1Score = level - 1; // Last successful level
-        updatePlayerScores();
-        currentPlayer = 2;
-        setTimeout(function() {
-          $("#level-title").text("Player 1 scored " + player1Score + ". Player 2's Turn");
-          $("body").removeClass("game-over");
-          setTimeout(function() {
-            startNextVsRound();
-          }, 1500);
-        }, 1000);
-      } else {
-        player2Score = level - 1; // Last successful level
-        updatePlayerScores();
-        
-        // Determine the winner
-        let resultMessage = "";
-        if (player1Score > player2Score) {
-          resultMessage = "Player 1 wins: " + player1Score + "-" + player2Score + "!";
-        } else if (player2Score > player1Score) {
-          resultMessage = "Player 2 wins: " + player2Score + "-" + player1Score + "!";
-        } else {
-          resultMessage = "It's a tie: " + player1Score + "-" + player2Score + "!";
+      
+      startOver();
+    } 
+    else if (gameMode === 'vs') {
+      // VS Mode - player made a mistake, eliminate them
+      activePlayers[currentPlayer] = false;
+      remainingPlayers--;
+      
+      // Update player display with enhanced styling
+      $(`#p${currentPlayer}-score`).addClass("eliminated");
+      $(`#p${currentPlayer}-score`).html(`<strong>Player ${currentPlayer}</strong> <span class="eliminated-text">(Eliminated)</span>`);
+      
+      // Add dramatic elimination effect
+      $("body").addClass("player-eliminated");
+      
+      // No elimination message display
+      
+      // Check if only one player remains (the winner)
+      if (remainingPlayers === 1) {
+        // Find the last player standing
+        let winner = 0;
+        for (let i = 1; i <= totalPlayers; i++) {
+          if (activePlayers[i]) {
+            winner = i;
+            break;
+          }
         }
         
-        $("#level-title").text(resultMessage + " Click to Play Again");
+        // Enhanced winner announcement with delay
         setTimeout(function() {
-          $("body").removeClass("game-over");
-        }, 200);
+          $("body").removeClass("player-eliminated game-over");
+          declareVsModeWinner([winner]);
+        }, 1500);
+      } 
+      else {
+        // More than one player still in the game
+        let nextPlayer = findNextActivePlayer(currentPlayer);
         
-        // Reset for a new game
-        startOver();
+        setTimeout(function() {
+          // No elimination message display
+          $("body").removeClass("player-eliminated game-over");
+          
+          setTimeout(function() {
+            currentPlayer = nextPlayer;
+            updatePlayerStatuses();
+            updateVsModeVisuals();
+            
+            // Reset for next player's turn
+            userClickedPattern = [];
+            
+            // Add new color for the next player (they still get to add to sequence)
+            addNewColorForCurrentPlayer();
+          }, 1500);
+        }, 1500);
       }
-    } else {
-      startOver(); // Default behavior
     }
   }
 }
 
-function nextSequence() {
-  userClickedPattern = [];
-  level++;
-  $("#level-title").text("Level " + level);
+// Add a new color for the current player's turn in VS mode
+function addNewColorForCurrentPlayer() {
+  // Add a new random color to the sequence
   var randomNumber = Math.floor(Math.random() * 4);
   var randomChosenColour = buttonColours[randomNumber];
   gamePattern.push(randomChosenColour);
-
-  // Flash only the newest color in the sequence
+  level++;
+  
+  // No subtitle display - just flash the new color
+  
+  // Flash the new color
   $("#" + randomChosenColour).addClass("flash");
   playSound(randomChosenColour);
   
   setTimeout(function() {
     $("#" + randomChosenColour).removeClass("flash");
-  }, 500); // Increased to 500ms for better visibility
+  }, 500);
 }
 
+function nextSequence() {
+  userClickedPattern = [];
+  
+  // Different behavior based on game mode
+  if (gameMode === 'vs') {
+    // In VS mode, this function is only called for the very first turn
+    level++;
+    
+    // Add first color for Player 1
+    var randomNumber = Math.floor(Math.random() * 4);
+    var randomChosenColour = buttonColours[randomNumber];
+    gamePattern.push(randomChosenColour);
+    
+    // No subtitle display - just flash the color
+    
+    // Flash the first color
+    $("#" + randomChosenColour).addClass("flash");
+    playSound(randomChosenColour);
+    
+    setTimeout(function() {
+      $("#" + randomChosenColour).removeClass("flash");
+    }, 500);
+  } else {
+    // Solo mode - original logic
+    level++;
+    $("#level-title").text("Level " + level);
+    
+    // Add a new color to the sequence
+    var randomNumber = Math.floor(Math.random() * 4);
+    var randomChosenColour = buttonColours[randomNumber];
+    gamePattern.push(randomChosenColour);
+
+    // Solo mode - flash only the newest color
+    $("#" + randomChosenColour).addClass("flash");
+    playSound(randomChosenColour);
+    
+    setTimeout(function() {
+      $("#" + randomChosenColour).removeClass("flash");
+    }, 500);
+  }
+}
+
+
 function animatePress(currentColor) {
-  $("#" + currentColor).addClass("pressed");
+  const $button = $("#" + currentColor);
+  $button.addClass("pressed");
+  
+  // Add player-specific effects in VS mode
+  if (gameMode === 'vs') {
+    // Get player color
+    const playerColor = getPlayerColor(currentPlayer);
+    
+    // Create a ripple effect with player color
+    const $ripple = $("<div>").addClass("player-ripple");
+    $ripple.css({
+      "background-color": playerColor,
+      "opacity": "0.7"
+    });
+    
+    // Add ripple to button and animate it
+    $button.append($ripple);
+    $ripple.animate({
+      width: "300px",
+      height: "300px",
+      opacity: "0"
+    }, 400, function() {
+      $(this).remove(); // Remove after animation completes
+    });
+  }
+  
   setTimeout(function () {
-    $("#" + currentColor).removeClass("pressed");
+    $button.removeClass("pressed");
   }, 300); // Increased to 300ms to match our new animation duration
 }
 
@@ -382,44 +577,312 @@ function startOver() {
   level = 0;
   gamePattern = [];
   started = false;
-  waitingForRestart = true; // Add a flag to indicate we're waiting for user click to restart
+  waitingForRestart = true; // Flag to indicate we're waiting for user click to restart
   console.log("Game over - waiting for user click to restart");
   
   // If in VS mode, reset player-specific variables
   if (gameMode === 'vs') {
-    player1Score = 0;
-    player2Score = 0;
+    // Reset all player statuses
+    for (let i = 1; i <= totalPlayers; i++) {
+      activePlayers[i] = true;
+    }
+    remainingPlayers = totalPlayers;
     currentPlayer = 1;
-    updatePlayerScores();
+    
+    // Reset the player displays
+    $(".player-score").removeClass("eliminated active-player");
+    
+    // Reset VS mode visual indicators but maintain VS mode styling
+    $(".player-indicator").removeClass("active");
+    setTimeout(function() {
+      $(".player-indicator").remove();
+    }, 300);
   }
 }
 
-// Function to update player scores in VS mode
-function updatePlayerScores() {
+// Function to update player statuses in VS mode
+function updatePlayerStatuses() {
   if (gameMode === 'vs') {
-    $("#p1-score").text("P1: " + player1Score);
-    $("#p2-score").text("P2: " + player2Score);
-    
-    // Highlight current player
-    if (currentPlayer === 1) {
-      $("#p1-score").addClass("active-player");
-      $("#p2-score").removeClass("active-player");
-    } else {
-      $("#p2-score").addClass("active-player");
-      $("#p1-score").removeClass("active-player");
+    // Update all player statuses
+    for (let i = 1; i <= totalPlayers; i++) {
+      // Skip updating if player is already marked as eliminated
+      if ($("#p" + i + "-score").hasClass("eliminated")) {
+        continue;
+      }
+      
+      // Enhanced player status with better formatting
+      let playerStatus = activePlayers[i] 
+        ? `<strong>Player ${i}</strong>` 
+        : `<strong>Player ${i}</strong> <span class="eliminated-text">(Eliminated)</span>`;
+      $("#p" + i + "-score").html(playerStatus);
+      
+      // Update active class with enhanced animations
+      if (i === currentPlayer && activePlayers[i]) {
+        $("#p" + i + "-score").addClass("active-player");
+        
+        // Calculate CSS color variables based on player number
+        const playerColor = getPlayerColor(i);
+        $("#p" + i + "-score").css("--player-color", playerColor);
+      } else {
+        $("#p" + i + "-score").removeClass("active-player");
+      }
+      
+      // Add eliminated class if player is out
+      if (!activePlayers[i]) {
+        $("#p" + i + "-score").addClass("eliminated");
+      }
     }
   }
 }
 
-// Start a new round in VS mode
-function startNextVsRound() {
-  userClickedPattern = [];
-  gamePattern = [];
-  level = 0;
-  started = true;
-  waitingForRestart = false;
-  $("#level-title").text("Player " + currentPlayer + "'s Turn");
-  updatePlayerScores();
-  nextSequence();
+// Helper function to get player colors
+function getPlayerColor(playerNumber) {
+  const colors = [
+    "rgb(255, 107, 107)", // P1: Red
+    "rgb(77, 171, 247)",  // P2: Blue
+    "rgb(255, 212, 59)",  // P3: Yellow
+    "rgb(56, 217, 169)",  // P4: Green
+    "rgb(204, 93, 232)"   // P5: Purple
+  ];
+  return colors[playerNumber - 1] || colors[0];
+}
+
+// Play the current sequence of colors for VS mode (NOT USED IN NEW VS MODE LOGIC)
+// This function is kept for reference but VS mode now uses individual color display
+function playCurrentSequence() {
+  // Disable buttons during sequence playback
+  $(".btn").css("pointer-events", "none");
+  
+  let i = 0;
+  const interval = 800; // Time between color flashes
+  
+  // Play each color in sequence with delay
+  function playNextInSequence() {
+    if (i < gamePattern.length) {
+      const color = gamePattern[i];
+      
+      // Flash button and play sound
+      $("#" + color).addClass("flash");
+      playSound(color);
+      
+      setTimeout(function() {
+        $("#" + color).removeClass("flash");
+        i++;
+        
+        // Wait before showing next color
+        setTimeout(playNextInSequence, interval * 0.5);
+      }, interval * 0.5);
+    } else {
+      // Enable buttons after sequence finishes
+      $(".btn").css("pointer-events", "auto");
+      
+      // No UI update needed - players just start clicking
+    }
+  }
+  
+  // Start the sequence playback
+  playNextInSequence();
+}
+
+// Find the next active player in VS mode
+function findNextActivePlayer(currentPlayerNum) {
+  let nextPlayer = currentPlayerNum;
+  
+  // Loop through players (max once through all players)
+  for (let i = 0; i < totalPlayers; i++) {
+    nextPlayer = (nextPlayer % totalPlayers) + 1; // Move to next player
+    
+    if (activePlayers[nextPlayer]) {
+      return nextPlayer;
+    }
+  }
+  
+  // If we couldn't find another active player, return the current one
+  return currentPlayerNum;
+}
+
+// Find the first active player
+function findFirstActivePlayer() {
+  for (let i = 1; i <= totalPlayers; i++) {
+    if (activePlayers[i]) {
+      return i;
+    }
+  }
+  return 1; // Default to player 1 if none found (shouldn't happen)
+}
+
+// Declare winner(s) for VS mode
+function declareVsModeWinner(winners) {
+  // Create the final result message
+  let resultMessage = "";
+  if (winners.length === 1) {
+    resultMessage = "Player " + winners[0] + " wins!";
+    // Add winner class to body to style with winner's color
+    $("body").addClass("winner-player" + winners[0]);
+  } else {
+    resultMessage = "Players " + winners.join(", ") + " tied!";
+  }
+  
+  // Add special winner class to the container
+  $(".container").addClass("victory-glow");
+  
+  // Display winner message with enhanced styling and better visibility
+  $("#level-title").html(`<div class="vs-mode-title victory-title">Game Over!</div>
+                         <div class="vs-mode-subtitle winner-message" style="font-size: 1.8rem !important; margin-top: 20px !important; color: gold !important; text-shadow: 0 0 15px rgba(255, 215, 0, 0.9) !important;">${resultMessage}</div>
+                         <div class="vs-mode-subtitle" style="margin-top: 25px !important; font-size: 1.2rem !important;">Click to Play Again</div>`);
+  
+  // Style the winner's player score display
+  winners.forEach(winner => {
+    $(`#p${winner}-score`).addClass("winner-player");
+  });
+                         
+  // Create victory celebration effect for winner(s)
+  celebrateVsModeWinner(winners);
+  
+  // Reset the game-over effect
+  setTimeout(function() {
+    $("body").removeClass("game-over");
+  }, 200);
+  
+  // Reset for a new game
+  startOver();
+}
+
+// Function to update visual indicators for VS mode
+function updateVsModeVisuals() {
+  if (gameMode === 'vs') {
+    // Add VS mode specific class to body
+    $("body").addClass("vs-mode-active");
+    
+    // Update player turn classes
+    $("body").removeClass("player1-turn player2-turn player3-turn player4-turn player5-turn");
+    $("body").addClass(`player${currentPlayer}-turn`);
+    
+    // Add subtle pulse effect to container
+    $(".container").addClass("vs-mode-pulse");
+    setTimeout(() => {
+      $(".container").removeClass("vs-mode-pulse");
+    }, 600);
+    
+    // Update player score indicators to show current player
+    for (let i = 1; i <= totalPlayers; i++) {
+      if (i === currentPlayer) {
+        $("#p" + i + "-score").addClass("active-player");
+        $("#p" + i + "-score").css("--player-color", getPlayerColor(i));
+      } else {
+        $("#p" + i + "-score").removeClass("active-player");
+      }
+    }
+  } else {
+    // Remove VS mode specific classes
+    $("body").removeClass("vs-mode-active player1-turn player2-turn player3-turn player4-turn player5-turn");
+    $(".container").removeClass("vs-mode-pulse");
+  }
+}
+
+// Function to create victory celebration effects
+function celebrateVsModeWinner(winnerPlayers) {
+  // Create confetti-like celebration
+  const confettiColors = winnerPlayers.map(player => getPlayerColor(player));
+  
+  // Add gold color for winners
+  confettiColors.push("gold", "#FEF2BF", "white");
+  
+  // Create confetti particles
+  const $gameContainer = $("body");
+  const gameRect = $gameContainer[0].getBoundingClientRect();
+  
+  // Create trophy animation in the center
+  const $trophy = $("<div>").addClass("trophy-animation");
+  $trophy.html('<svg viewBox="0 0 24 24"><path fill="gold" d="M18 5V2H6V5H4V6C4 8.77 6.23 11 9 11C9.83 11 10.58 10.71 11.21 10.21C11.76 11.5 12.8 12.5 14 12.92V15H10V17H14V20H8V22H16V20H10V17H14V15H10V12.92C11.2 12.5 12.24 11.5 12.79 10.21C13.42 10.71 14.17 11 15 11C17.77 11 20 8.77 20 6V5H18M6 6V5H8V6C8 7.82 6.82 9 5 9C5.46 7.77 5.46 7.23 6 6M18 6V5H16V6C16.54 7.23 16.54 7.77 17 9C18.82 9 20 7.82 20 6V5H18V6Z"/></svg>');
+  $trophy.css({
+    position: 'absolute',
+    top: '40%',
+    left: '50%',
+    transform: 'translate(-50%, -50%) scale(0)',
+    width: '100px',
+    height: '100px',
+    zIndex: 1000,
+    animation: 'trophy-appear 1.5s forwards'
+  });
+  $gameContainer.append($trophy);
+  
+  // Remove trophy after animation
+  setTimeout(() => {
+    $trophy.remove();
+  }, 3000);
+  
+  // Create more particles for a richer effect
+  for (let i = 0; i < 150; i++) {
+    const $confetti = $("<div>").addClass("confetti");
+    const size = Math.random() * 12 + 5;
+    const color = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+    const delay = Math.random() * 3;
+    const duration = Math.random() * 3 + 3;
+    const startX = Math.random() * gameRect.width;
+    
+    $confetti.css({
+      width: size + "px",
+      height: size + "px",
+      background: color,
+      left: startX + "px",
+      top: -20 + "px",
+      opacity: Math.random() * 0.8 + 0.2,
+      animation: `fall ${duration}s cubic-bezier(0.22, 1, 0.36, 1) forwards ${delay}s`,
+      boxShadow: `0 0 ${size/2}px rgba(255, 255, 255, 0.5)`
+    });
+    
+    // Create different shapes for more visual variety
+    if (i % 7 === 0) {
+      $confetti.css({
+        borderRadius: "50%"
+      });
+    } else if (i % 7 === 1) {
+      $confetti.css({
+        transform: "rotate(45deg)",
+        borderRadius: "3px"
+      });
+    } else if (i % 7 === 2) {
+      $confetti.css({
+        clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)"
+      });
+    } else if (i % 7 === 3) {
+      $confetti.css({
+        clipPath: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)"
+      });
+    } else if (i % 7 === 4) {
+      $confetti.css({
+        clipPath: "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
+      });
+      $confetti.text("+1");
+      $confetti.css({
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "white",
+        fontSize: size / 2 + "px",
+        fontWeight: "bold"
+      });
+    } else if (i % 7 === 5) {
+      const starPlayer = winnerPlayers[Math.floor(Math.random() * winnerPlayers.length)];
+      $confetti.text("P" + starPlayer);
+      $confetti.css({
+        borderRadius: "50%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "black",
+        fontSize: size / 2 + "px",
+        fontWeight: "bold"
+      });
+    }
+    
+    $gameContainer.append($confetti);
+    
+    // Remove confetti after animation ends to prevent memory leaks
+    setTimeout(function() {
+      $confetti.remove();
+    }, (duration + delay + 1) * 1000);
+  }
 }
 

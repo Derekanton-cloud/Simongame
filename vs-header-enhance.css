@@ -1,0 +1,206 @@
+/* VS Mode Header Enhancement */
+/* This file improves header alignment and visual consistency for all VS game modes */
+
+/* Main container for all VS mode headers */
+body.vs-mode #level-title {
+  position: relative;
+  z-index: 5;
+  margin-bottom: 30px !important;
+  text-align: center !important;
+  width: 100% !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  display: block !important;
+  top: 0 !important; /* Ensure proper vertical positioning */
+  left: 0 !important; /* Ensure proper horizontal positioning */
+  transform: none !important; /* Remove any transforms that might affect positioning */
+}
+
+/* Main VS MODE header text with improved neon effect */
+body.vs-mode #level-title::before {
+  content: "VS MODE";
+  display: block;
+  color: #ff3366 !important;
+  text-shadow: 
+    0 0 5px #ff3366,
+    0 0 10px #ff3366,
+    0 0 20px #ff3366,
+    0 0 40px #ff3366 !important;
+  font-size: 3.2rem !important;
+  letter-spacing: 4px !important;
+  margin: 0 auto 15px auto !important; /* Center horizontally with auto margins */
+  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.8) !important;
+  animation: vs-mode-header-pulse 2s infinite alternate !important;
+  text-transform: uppercase !important;
+  line-height: 1.2 !important;
+  text-align: center !important;
+  width: 100% !important;
+}
+
+/* Container for subtitle content */
+.subtitle-container {
+  display: inline-block !important;
+  width: auto !important;
+  text-align: center !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+}
+
+/* Enhanced container styling for VS mode subtitles - REMOVED DOUBLE BOXES */
+body.vs-mode .subtitle-container {
+  display: inline-block !important;
+  margin: 5px auto 0 !important;
+  text-align: center !important;
+  width: auto !important;
+}
+
+/* Subtle glow animation for subtitle container */
+@keyframes subtitle-glow {
+  0% {
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.7),
+      0 0 15px rgba(255, 223, 0, 0.2) !important;
+  }
+  100% {
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.7),
+      0 0 25px rgba(255, 223, 0, 0.4) !important;
+  }
+}
+
+/* Improved animation for VS Mode header */
+@keyframes vs-mode-header-pulse {
+  from {
+    text-shadow: 
+      0 0 5px #ff3366,
+      0 0 10px #ff3366,
+      0 0 15px #ff3366;
+    transform: scale(1);
+  }
+  to {
+    text-shadow: 
+      0 0 10px #ff3366,
+      0 0 20px #ff3366,
+      0 0 30px #ff3366,
+      0 0 40px #ff3366;
+    transform: scale(1.03);
+  }
+}
+
+/* Entrance animations */
+.animated-entrance {
+  animation: slide-in-fade 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes slide-in-fade {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Mode-specific styles for different player counts */
+/* 2 players - 1v1 Duel */
+body.vs-mode[data-players="2"] .subtitle-container {
+  border-color: rgba(255, 86, 86, 0.7) !important;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.7),
+    0 0 20px rgba(255, 86, 86, 0.3) !important;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.8), rgba(40, 0, 0, 0.7)) !important;
+}
+
+body.vs-mode[data-players="2"] #level-title .vs-mode-subtitle {
+  text-shadow: 
+    1px 1px 0 #000000,
+    -1px 1px 0 #000000,
+    1px -1px 0 #000000,
+    -1px -1px 0 #000000,
+    0 0 8px rgba(255, 86, 86, 0.3) !important;
+}
+
+/* 3 players - Triple-Threat */
+body.vs-mode[data-players="3"] .subtitle-container {
+  border-color: rgba(255, 212, 59, 0.7) !important;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.7),
+    0 0 20px rgba(255, 212, 59, 0.3) !important;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.8), rgba(40, 30, 0, 0.7)) !important;
+}
+
+body.vs-mode[data-players="3"] #level-title .vs-mode-subtitle {
+  text-shadow: 
+    1px 1px 0 #000000,
+    -1px 1px 0 #000000,
+    1px -1px 0 #000000,
+    -1px -1px 0 #000000,
+    0 0 8px rgba(255, 212, 59, 0.3) !important;
+}
+
+/* 4 players - Fatal 4-Way */
+body.vs-mode[data-players="4"] .subtitle-container {
+  border-color: rgba(77, 171, 247, 0.7) !important;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.7),
+    0 0 20px rgba(77, 171, 247, 0.3) !important;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.8), rgba(0, 20, 40, 0.7)) !important;
+}
+
+body.vs-mode[data-players="4"] #level-title .vs-mode-subtitle {
+  text-shadow: 
+    1px 1px 0 #000000,
+    -1px 1px 0 #000000,
+    1px -1px 0 #000000,
+    -1px -1px 0 #000000,
+    0 0 8px rgba(77, 171, 247, 0.3) !important;
+}
+
+/* 5 players - Pentagonal Panic */
+body.vs-mode[data-players="5"] .subtitle-container {
+  border-color: rgba(56, 217, 169, 0.7) !important;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.7),
+    0 0 20px rgba(56, 217, 169, 0.3) !important;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.8), rgba(0, 40, 30, 0.7)) !important;
+}
+
+body.vs-mode[data-players="5"] #level-title .vs-mode-subtitle {
+  text-shadow: 
+    1px 1px 0 #000000,
+    -1px 1px 0 #000000,
+    1px -1px 0 #000000,
+    -1px -1px 0 #000000,
+    0 0 8px rgba(56, 217, 169, 0.3) !important;
+}
+
+/* Responsive adjustments for different screen sizes */
+@media (max-width: 768px) {
+  body.vs-mode #level-title::before {
+    font-size: 2.8rem !important;
+    letter-spacing: 3px !important;
+  }
+  
+  #level-title .vs-mode-subtitle {
+    font-size: 1.2rem !important;
+    padding: 10px 18px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body.vs-mode #level-title::before {
+    font-size: 2.4rem !important;
+    letter-spacing: 2px !important;
+  }
+  
+  #level-title .vs-mode-subtitle {
+    font-size: 1rem !important;
+    padding: 8px 16px !important;
+    max-width: 100% !important;
+  }
+}

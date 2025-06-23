@@ -1,0 +1,110 @@
+/* VS Mode Professional Styling - High Priority Rules */
+/* This file contains styling specifically for making VS Mode headers look professional */
+
+/* Master container styling - this overrides all other styles */
+body.vs-mode #level-title {
+  display: block !important;
+  position: relative !important;
+  width: 100% !important;
+  text-align: center !important;
+  margin: 0 auto 30px !important;
+  padding: 0 !important;
+}
+
+/* VS MODE title text */
+body.vs-mode #level-title::before {
+  content: "VS MODE" !important;
+  display: block !important;
+  font-family: 'Press Start 2P', cursive !important;
+  color: #ff3366 !important;
+  text-shadow: 
+    0 0 5px #ff3366,
+    0 0 10px #ff3366,
+    0 0 20px #ff3366,
+    0 0 40px #ff3366 !important;
+  font-size: 3.5rem !important;
+  letter-spacing: 4px !important;
+  margin: 0 auto 15px !important;
+  text-align: center !important;
+  width: 100% !important;
+  text-transform: uppercase !important;
+  animation: vs-pro-pulse 2s infinite alternate !important;
+  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.8) !important;
+  font-weight: bold !important;
+  line-height: 1.2 !important;
+}
+
+/* Player turn subtitle */
+body.vs-mode #level-title .vs-mode-subtitle {
+  display: block !important;
+  font-family: 'Press Start 2P', cursive !important;
+  color: #FFDF00 !important;
+  text-shadow: 
+    2px 2px 0 #000000,
+    -2px 2px 0 #000000,
+    2px -2px 0 #000000,
+    -2px -2px 0 #000000 !important;
+  font-size: 1.5rem !important;
+  letter-spacing: 2px !important;
+  margin: 15px auto 0 !important;
+  text-align: center !important;
+  text-transform: uppercase !important;
+  font-weight: bold !important;
+  max-width: 80% !important;
+  line-height: 1.4 !important;
+  -webkit-text-stroke: 1px black !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* Wrapper for subtitle - NO BACKGROUND OR BORDER */
+body.vs-mode .subtitle-container {
+  display: block !important;
+  width: 100% !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  text-align: center !important;
+}
+
+/* Professional pulsing animation */
+@keyframes vs-pro-pulse {
+  0% {
+    text-shadow: 
+      0 0 5px #ff3366,
+      0 0 10px #ff3366,
+      0 0 20px #ff3366;
+    transform: scale(1);
+  }
+  100% {
+    text-shadow: 
+      0 0 10px #ff3366,
+      0 0 20px #ff3366,
+      0 0 30px #ff3366,
+      0 0 50px #ff3366;
+    transform: scale(1.03);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  body.vs-mode #level-title::before {
+    font-size: 3rem !important;
+  }
+  
+  body.vs-mode #level-title .vs-mode-subtitle {
+    font-size: 1.3rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body.vs-mode #level-title::before {
+    font-size: 2.5rem !important;
+  }
+  
+  body.vs-mode #level-title .vs-mode-subtitle {
+    font-size: 1.1rem !important;
+  }
+}

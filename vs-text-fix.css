@@ -1,0 +1,75 @@
+/* Special fix for VS Mode text visibility */
+
+/* Target specifically the "Player X's Turn" subtitle text */
+#level-title .vs-mode-subtitle {
+  color: #FFDF00 !important; /* Bright yellowy gold for contrast */
+  text-shadow: 
+    2px 2px 0 #000000,
+    -2px 2px 0 #000000,
+    2px -2px 0 #000000,
+    -2px -2px 0 #000000 !important;
+  font-weight: bold !important;
+  -webkit-text-stroke: 1.5px black !important;
+  padding: 5px 15px !important; /* Minimal padding */
+  display: block !important; /* Changed to block for better layout */
+  margin: 15px auto 0 !important; /* Increased top margin */
+  letter-spacing: 2px !important; /* Enhanced letter spacing */
+  font-size: 1.5rem !important; /* Slightly larger but still compact */
+  border: none !important;
+  max-width: 100% !important; /* Full width for proper alignment */
+  word-wrap: normal !important;
+  text-align: center !important;
+  line-height: 1.4 !important;
+  text-transform: uppercase !important; /* All caps for professional look */
+  font-family: 'Press Start 2P', cursive !important; /* Ensure pixel font */
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* VS Mode enhanced neon title */
+body.vs-mode #level-title {
+  position: relative;
+  z-index: 5;
+  margin-bottom: 25px !important;
+  width: 100% !important;
+  text-align: center !important;
+}
+
+/* Make the VS MODE title more prominent and centered */
+body.vs-mode #level-title::before {
+  content: "VS MODE";
+  display: block;
+  color: #ff3366 !important; /* Bright neon pink */
+  text-shadow: 
+    0 0 5px #ff3366,
+    0 0 10px #ff3366,
+    0 0 20px #ff3366,
+    0 0 40px #ff3366 !important;
+  font-size: 3.5rem !important;
+  letter-spacing: 4px !important;
+  margin: 0 auto 10px auto !important; /* Center horizontally */
+  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.8) !important;
+  animation: vs-mode-pulse 2s infinite alternate !important;
+  text-align: center !important;
+  width: 100% !important; /* Full width to ensure centering */
+  font-family: 'Press Start 2P', cursive !important;
+  text-transform: uppercase !important;
+}
+
+@keyframes vs-mode-pulse {
+  from {
+    text-shadow: 
+      0 0 5px #ff3366,
+      0 0 10px #ff3366,
+      0 0 20px #ff3366;
+    transform: scale(1);
+  }
+  to {
+    text-shadow: 
+      0 0 10px #ff3366,
+      0 0 20px #ff3366,
+      0 0 40px #ff3366,
+      0 0 60px #ff3366;
+    transform: scale(1.03);
+  }
+}

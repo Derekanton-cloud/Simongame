@@ -1,0 +1,52 @@
+/* VS Mode Enhanced Text Visibility */
+
+/* Main VS Mode title - neon text effect */
+body.vs-mode #level-title::before {
+  content: "VS MODE";
+  display: block;
+  color: #ff3366;
+  font-size: 3.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin-bottom: 20px;
+  text-shadow: 
+    0 0 10px #ff3366,
+    0 0 20px #ff3366,
+    0 0 40px #ff3366;
+  animation: neon-pulse 2s infinite alternate;
+}
+
+@keyframes neon-pulse {
+  from {
+    text-shadow: 
+      0 0 10px #ff3366,
+      0 0 20px #ff3366;
+  }
+  to {
+    text-shadow: 
+      0 0 10px #ff3366,
+      0 0 20px #ff3366,
+      0 0 40px #ff3366,
+      0 0 60px #ff3366;
+  }
+}
+
+/* Player turn text */
+.vs-mode-subtitle {
+  display: inline-block;
+  color: #FFDF00 !important;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 1.4rem !important;
+  font-weight: bold;
+  letter-spacing: 1px;
+  border: 2px solid #FFDF00;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+  text-shadow: 
+    2px 2px 0 #000,
+    -2px 2px 0 #000,
+    2px -2px 0 #000,
+    -2px -2px 0 #000;
+}

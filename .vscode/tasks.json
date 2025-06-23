@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Run Simon Game",
+			"command": "npx http-server",
+			"isBackground": true,
+			"problemMatcher": [],
+			"args": [
+				"-p",
+				"8080"
+			]
+		}
+	]
+}

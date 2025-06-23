@@ -1,0 +1,236 @@
+/* VS Mode Visibility Improvements */
+/* This file contains fixes for text visibility, button contrast, and overall readability */
+
+/* Improve text visibility */
+body.vs-mode #level-title {
+  /* Enhance contrast with stronger text shadow */
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), 
+               0 0 5px rgba(0, 0, 0, 0.9),
+               0 0 15px rgba(255, 255, 255, 0.3);
+  /* Brighter gradient for the text */
+  background-image: linear-gradient(180deg, #ffffff, #fff6d8);
+  /* Add a subtle outline */
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.3);
+  /* Increase size for better visibility */
+  font-size: 2.5rem !important;
+  padding: 10px 0;
+  letter-spacing: 1.5px;
+}
+
+/* Enhance player score indicators */
+.player-score {
+  background-color: rgba(0, 0, 0, 0.7) !important; /* Darker background */
+  color: #ffffff !important; /* Bright white text */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important; /* Strong text shadow */
+  border: 2px solid rgba(255, 255, 255, 0.25) !important; /* More visible border */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important; /* Stronger shadow */
+  font-size: 1rem !important; /* Larger text */
+  padding: 15px 25px !important; /* More padding */
+  min-width: 130px !important; /* Wider containers */
+  margin: 5px !important; /* More spacing */
+}
+
+/* Enhanced text for eliminated players */
+.eliminated-text {
+  color: #ff5555 !important;
+  display: block;
+  margin-top: 5px;
+  font-style: italic;
+  text-shadow: 0 0 5px rgba(255, 0, 0, 0.5) !important;
+}
+
+/* Active player enhancement */
+.player-score.active-player {
+  border-width: 3px !important;
+  box-shadow: 0 0 20px var(--player-color, rgba(100, 200, 255, 0.9)) !important;
+  background-color: rgba(0, 0, 0, 0.85) !important;
+}
+
+/* Improved button visibility */
+body.vs-mode .btn {
+  /* Increased contrast with stronger gradients */
+  box-shadow: 
+    0 0 20px rgba(0, 0, 0, 0.5),
+    inset 0 0 15px rgba(255, 255, 255, 0.2),
+    0 5px 15px rgba(0, 0, 0, 0.5) !important;
+  border-width: 10px !important; /* Thicker border */
+  opacity: 0.9; /* Slightly increase opacity */
+  transform: scale(1.02); /* Make buttons slightly larger */
+  /* Make the buttons more visible with stronger contrasting borders */
+  border: 12px solid rgba(0, 0, 0, 0.9) !important;
+  position: relative !important;
+  z-index: 5 !important;
+  /* Add subtle glow effect */
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+}
+
+/* Improved button hover effects */
+body.vs-mode .btn:hover {
+  filter: brightness(1.2) !important;
+  transform: translateY(-3px) scale(1.05) !important;
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.6),
+    inset 0 0 20px rgba(255, 255, 255, 0.3),
+    0 0 15px rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Enhanced button flash effect */
+body.vs-mode .btn.flash {
+  opacity: 1 !important;
+  filter: brightness(1.5) !important;
+  box-shadow: 
+    0 0 40px rgba(255, 255, 255, 0.9),
+    inset 0 0 30px rgba(255, 255, 255, 0.8),
+    0 0 25px var(--player-color, rgba(255, 255, 255, 0.7)) !important;
+}
+
+/* Specific color enhancements */
+body.vs-mode .btn.red {
+  background: radial-gradient(circle at 30% 30%, #ff8585, #c52020) !important;
+}
+
+body.vs-mode .btn.green {
+  background: radial-gradient(circle at 30% 30%, #50ebc0, #219d76) !important;
+}
+
+body.vs-mode .btn.blue {
+  background: radial-gradient(circle at 30% 30%, #65b8ff, #0d5ca0) !important;
+}
+
+body.vs-mode .btn.yellow {
+  background: radial-gradient(circle at 30% 30%, #ffdf65, #e67000) !important;
+}
+
+/* VS Mode subtitle with better visibility */
+.vs-mode-subtitle {
+  color: #FFC830 !important; /* Bright gold/amber color for contrast */
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0, 0, 0, 0.7) !important;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-top: 10px !important;
+  font-size: 1.1rem !important;
+  letter-spacing: 0.5px !important;
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.7); /* Text outline for better visibility */
+}
+
+/* Better container visibility */
+body.vs-mode .container {
+  background-color: rgba(1, 31, 63, 0.4); /* Slightly visible background */
+  border-radius: 15px;
+  box-shadow: 
+    0 0 30px rgba(0, 0, 0, 0.5),
+    inset 0 0 20px rgba(0, 0, 0, 0.3) !important;
+  padding: 35px !important;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  background-color: rgba(1, 31, 63, 0.5); 
+}
+
+/* Back to home link enhancement */
+body.vs-mode .back-to-home {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  color: #FFFFFF !important;
+  font-weight: bold;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 10px 16px !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Make the container stand out more from the background */
+body.vs-mode .container {
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  background-color: rgba(1, 31, 63, 0.5); 
+}
+
+/* Additional subtitle visibility */
+.vs-mode-subtitle {
+  margin-top: 10px !important;
+  font-size: 1.1rem !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* Make eliminated players more visible but clearly eliminated */
+.player-score.eliminated {
+  background: linear-gradient(to right, rgba(80, 0, 0, 0.7), rgba(50, 0, 0, 0.7)) !important;
+  border-color: rgba(255, 80, 80, 0.4) !important;
+  position: relative !important;
+}
+
+/* Add a diagonal strike-through line for eliminated players */
+.player-score.eliminated:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 2px;
+  background-color: rgba(255, 80, 80, 0.8);
+  transform: rotate(-10deg);
+}
+
+/* Additional Button Visibility Improvements */
+
+/* Make the buttons more visible with stronger contrasting borders */
+body.vs-mode .btn {
+  border: 12px solid rgba(0, 0, 0, 0.9) !important;
+  position: relative !important;
+  z-index: 5 !important;
+  /* Add subtle glow effect */
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+}
+
+/* Add 3D effect to buttons for better visibility */
+body.vs-mode .red, 
+body.vs-mode .green, 
+body.vs-mode .blue, 
+body.vs-mode .yellow {
+  position: relative;
+  overflow: visible;
+}
+
+/* Create glowing borders around buttons */
+body.vs-mode .red:before, 
+body.vs-mode .green:before, 
+body.vs-mode .blue:before, 
+body.vs-mode .yellow:before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  z-index: -1;
+  border-radius: 30%;
+  opacity: 0.6;
+  filter: blur(8px);
+}
+
+body.vs-mode .red:before {
+  background-color: rgba(255, 99, 71, 0.7);
+}
+
+body.vs-mode .green:before {
+  background-color: rgba(46, 204, 113, 0.7);
+}
+
+body.vs-mode .blue:before {
+  background-color: rgba(52, 152, 219, 0.7);
+}
+
+body.vs-mode .yellow:before {
+  background-color: rgba(241, 196, 15, 0.7);
+}
+
+/* Enhanced flash effect */
+body.vs-mode .btn.flash:before {
+  opacity: 1;
+  filter: blur(15px);
+  animation: button-pulse 0.6s infinite alternate;
+}
+
+@keyframes button-pulse {
+  from { transform: scale(1); opacity: 0.6; }
+  to { transform: scale(1.1); opacity: 0.9; }
+}
