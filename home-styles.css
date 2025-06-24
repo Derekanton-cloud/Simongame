@@ -18,6 +18,14 @@
   position: relative;
 }
 
+/* Mobile responsive fix - allow scrolling on small screens */
+@media (max-width: 768px) {
+  .home-page {
+    overflow-y: auto !important;
+    min-height: 100vh;
+  }
+}
+
 /* Floating symbols animation */
 .floating-symbols {
   position: absolute;
