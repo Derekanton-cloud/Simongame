@@ -5,10 +5,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>Simon Game - Home</title>  <link rel="stylesheet" href="styles.css?v=3">
-  <link rel="stylesheet" href="home-styles.css?v=3">
-  <link rel="stylesheet" href="modal-styles.css?v=3">
+  <title>Simon Game - Home</title>  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>  
+  <script src="home.js"></script>
+  <script src="modal-patch.js"></script>
+  <script src="howto-modal-game.js"></script><link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="home-styles.css?v=3">  <link rel="stylesheet" href="modal-styles.css?v=3">
   <link rel="stylesheet" href="player-positions.css?v=3">
+  <link rel="stylesheet" href="howto-modal-styles.css">
   <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
   <!-- Added favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
@@ -134,9 +138,172 @@
             <p class="option-subtitle">Five-player memory mayhem</p>
           </div>
         </a>
+      </div>    </div>
+  </div>
+
+  <!-- How To Play Modals -->
+  <!-- Solo Play Modal -->
+  <div id="howto-solo-modal" class="howto-modal">
+    <div class="howto-modal-content">
+      <div class="howto-modal-header">
+        <h2><span class="howto-icon">🎯</span> How To Play - Solo Mode</h2>
+        <span class="howto-close" data-modal="howto-solo-modal">&times;</span>
+      </div>
+      <div class="howto-modal-body">
+        <div class="howto-section">
+          <h3>🎮 Objective</h3>
+          <p>Test your memory by repeating increasingly complex color sequences. See how far you can go!</p>
+        </div>
+        <div class="howto-section">
+          <h3>📋 Rules</h3>
+          <ul>
+            <li>Watch the sequence of colors that light up</li>
+            <li>Repeat the sequence by clicking the buttons in the same order</li>
+            <li>Each round adds one more color to the sequence</li>
+            <li>Make a mistake and the game ends</li>
+            <li>Your high score is saved automatically</li>
+          </ul>
+        </div>
+        <div class="howto-section">
+          <h3>🏆 Scoring</h3>
+          <p>Your score increases with each successful round. Challenge yourself to beat your high score!</p>
+        </div>
+      </div>
+      <div class="howto-modal-footer">
+        <button class="howto-understand-btn" data-modal="howto-solo-modal" data-mode="solo">I Understand - Start Playing!</button>
       </div>
     </div>
-  </div><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>  <script src="home.js"></script>
+  </div>
+
+  <!-- 2 Players Modal -->
+  <div id="howto-2players-modal" class="howto-modal">
+    <div class="howto-modal-content">
+      <div class="howto-modal-header">
+        <h2><span class="howto-icon">⚔️</span> How To Play - 2 Players Duel</h2>
+        <span class="howto-close" data-modal="howto-2players-modal">&times;</span>
+      </div>
+      <div class="howto-modal-body">        <div class="howto-section">
+          <h3>🎮 Objective</h3>
+          <p>Battle head-to-head in turn-based memory warfare! Each turn adds a new color to the sequence. Survive longer than your opponent!</p>
+        </div><div class="howto-section">
+          <h3>📋 Rules</h3>
+          <ul>
+            <li><strong>Turn Order:</strong> Player 1 goes first, then Player 2</li>
+            <li><strong>Player 1's Turn:</strong> A new color is added to the sequence, then Player 1 must repeat the entire sequence in exact order</li>
+            <li><strong>Player 2's Turn:</strong> Another new color is added, then Player 2 must repeat the entire sequence in exact order</li>
+            <li><strong>Growing Sequence:</strong> Each turn adds one more color, making the sequence progressively longer</li>
+            <li><strong>Elimination:</strong> Make a mistake and you're eliminated. No second chances!</li>
+            <li><strong>Victory:</strong> Last player standing wins the duel</li>
+          </ul>
+        </div>
+        <div class="howto-section">
+          <h3>🏆 Victory</h3>
+          <p>Outlast your opponent by maintaining perfect accuracy. One mistake and you're eliminated!</p>
+        </div>
+      </div>
+      <div class="howto-modal-footer">
+        <button class="howto-understand-btn" data-modal="howto-2players-modal" data-mode="vs" data-players="2">I Understand - Start Dueling!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 Players Modal -->
+  <div id="howto-3players-modal" class="howto-modal">
+    <div class="howto-modal-content">
+      <div class="howto-modal-header">
+        <h2><span class="howto-icon">🔺</span> How To Play - 3 Players Battle</h2>
+        <span class="howto-close" data-modal="howto-3players-modal">&times;</span>
+      </div>
+      <div class="howto-modal-body">        <div class="howto-section">
+          <h3>🎮 Objective</h3>
+          <p>Triple threat memory battle! Each player's turn adds a new color to the growing sequence. Outlast both opponents to claim victory!</p>
+        </div><div class="howto-section">
+          <h3>📋 Rules</h3>
+          <ul>
+            <li><strong>Turn Order:</strong> Player 1 → Player 2 → Player 3, then repeat</li>
+            <li><strong>Each Turn:</strong> A new color is added to the sequence, then the current player repeats the entire sequence in exact order</li>
+            <li><strong>Round 1:</strong> P1 gets 1 color, P2 gets 2 colors, P3 gets 3 colors</li>
+            <li><strong>Round 2:</strong> P1 gets 4 colors, P2 gets 5 colors, P3 gets 6 colors (if all survive)</li>
+            <li><strong>Elimination:</strong> One mistake eliminates you permanently</li>
+            <li><strong>Victory:</strong> Last player standing wins the triple threat!</li>
+          </ul>
+        </div>
+        <div class="howto-section">
+          <h3>🏆 Victory</h3>
+          <p>Be the last player standing in this intense three-way memory battle!</p>
+        </div>
+      </div>
+      <div class="howto-modal-footer">
+        <button class="howto-understand-btn" data-modal="howto-3players-modal" data-mode="vs" data-players="3">I Understand - Start Battle!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 Players Modal -->
+  <div id="howto-4players-modal" class="howto-modal">
+    <div class="howto-modal-content">
+      <div class="howto-modal-header">
+        <h2><span class="howto-icon">💀</span> How To Play - Fatal 4-Way</h2>
+        <span class="howto-close" data-modal="howto-4players-modal">&times;</span>
+      </div>
+      <div class="howto-modal-body">        <div class="howto-section">
+          <h3>🎮 Objective</h3>
+          <p>Four-way memory mayhem! Each turn adds complexity as players build an ever-growing sequence. Survive the chaos to emerge victorious!</p>
+        </div><div class="howto-section">
+          <h3>📋 Rules</h3>
+          <ul>
+            <li><strong>Turn Order:</strong> Player 1 → Player 2 → Player 3 → Player 4, then repeat</li>
+            <li><strong>Each Turn:</strong> A new color is added to the sequence, then the current player repeats the entire sequence in exact order</li>
+            <li><strong>Round 1:</strong> P1 gets 1 color, P2 gets 2 colors, P3 gets 3 colors, P4 gets 4 colors</li>
+            <li><strong>Intensifying Pressure:</strong> By Round 2, sequences start at 5+ colors</li>
+            <li><strong>Fatal Mistake:</strong> One wrong move and you're eliminated forever</li>
+            <li><strong>Survival of the Fittest:</strong> Only the strongest memory survives this 4-way battle</li>
+          </ul>
+        </div>
+        <div class="howto-section">
+          <h3>🏆 Victory</h3>
+          <p>Survive the chaos and prove you have the ultimate memory. Fatal 4-Way champion!</p>
+        </div>
+      </div>
+      <div class="howto-modal-footer">
+        <button class="howto-understand-btn" data-modal="howto-4players-modal" data-mode="vs" data-players="4">I Understand - Enter the Arena!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 Players Modal -->
+  <div id="howto-5players-modal" class="howto-modal">
+    <div class="howto-modal-content">
+      <div class="howto-modal-header">
+        <h2><span class="howto-icon">🌟</span> How To Play - Pentagonal Panic</h2>
+        <span class="howto-close" data-modal="howto-5players-modal">&times;</span>
+      </div>
+      <div class="howto-modal-body">        <div class="howto-section">
+          <h3>🎮 Objective</h3>
+          <p>Five-player memory marathon! Each turn builds an increasingly complex sequence. Conquer the longest wait times and ultimate pressure!</p>
+        </div><div class="howto-section">
+          <h3>📋 Rules</h3>
+          <ul>
+            <li><strong>Turn Order:</strong> Player 1 → Player 2 → Player 3 → Player 4 → Player 5, then repeat</li>
+            <li><strong>Each Turn:</strong> A new color is added to the sequence, then the current player repeats the entire sequence in exact order</li>
+            <li><strong>Round 1:</strong> P1 gets 1 color, P2 gets 2 colors... P5 gets 5 colors</li>
+            <li><strong>Round 2:</strong> P1 gets 6 colors, P2 gets 7 colors... and so on</li>
+            <li><strong>Maximum Chaos:</strong> Longer wait times between turns add psychological pressure</li>
+            <li><strong>Ultimate Challenge:</strong> Only the most focused mind can survive this 5-player gauntlet</li>
+          </ul>
+        </div>
+        <div class="howto-section">
+          <h3>🏆 Victory</h3>
+          <p>Achieve legendary status by conquering the ultimate 5-player memory mayhem!</p>
+        </div>
+      </div>
+      <div class="howto-modal-footer">
+        <button class="howto-understand-btn" data-modal="howto-5players-modal" data-mode="vs" data-players="5">I Understand - Begin the Madness!</button>
+      </div>
+    </div>
+  </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="home.js"></script>
   <script src="modal-patch.js"></script>
 </body>
 

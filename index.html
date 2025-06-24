@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="vs-professional-styling.css">
   <link rel="stylesheet" href="vs-game-header-fix.css?v=2">
    <link rel="stylesheet" href="one-page-layout-fix.css">
+  <link rel="stylesheet" href="howto-modal-styles.css">
   <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
   <!-- Added favicon to prevent 404 errors -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
@@ -69,6 +70,172 @@
 
   </div>
 
+  <!-- How To Play Modals -->
+  <!-- Solo Play Modal -->
+  <div id="howto-solo-modal" class="howto-modal">
+    <div class="howto-modal-content">
+      <div class="howto-modal-header">
+        <h2><span class="howto-icon">🎯</span> How To Play - Solo Mode</h2>
+        <span class="howto-close" data-modal="howto-solo-modal">&times;</span>
+      </div>
+      <div class="howto-modal-body">
+        <div class="howto-section">
+          <h3>🎮 Objective</h3>
+          <p>Test your memory by repeating increasingly complex color sequences. See how far you can go!</p>
+        </div>
+        <div class="howto-section">
+          <h3>📋 Rules</h3>
+          <ul>
+            <li>Watch the sequence of colors that light up</li>
+            <li>Repeat the sequence by clicking the buttons in the same order</li>
+            <li>Each round adds one more color to the sequence</li>
+            <li>Make a mistake and the game ends</li>
+            <li>Your high score is saved automatically</li>
+          </ul>
+        </div>
+        <div class="howto-section">
+          <h3>🏆 Scoring</h3>
+          <p>Your score increases with each successful round. Challenge yourself to beat your high score!</p>
+        </div>
+      </div>
+      <div class="howto-modal-footer">
+        <button class="howto-understand-btn" data-modal="howto-solo-modal" data-mode="solo">I Understand - Start Playing!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 Players Modal -->
+  <div id="howto-2players-modal" class="howto-modal">
+    <div class="howto-modal-content">
+      <div class="howto-modal-header">
+        <h2><span class="howto-icon">⚔️</span> How To Play - 2 Players Duel</h2>
+        <span class="howto-close" data-modal="howto-2players-modal">&times;</span>
+      </div>
+      <div class="howto-modal-body">
+        <div class="howto-section">
+          <h3>🎮 Objective</h3>
+          <p>Battle head-to-head! Take turns repeating sequences. Last player standing wins!</p>
+        </div>
+        <div class="howto-section">
+          <h3>📋 Rules</h3>
+          <ul>
+            <li>Players take turns attempting the same sequence</li>
+            <li>If a player makes a mistake, they're eliminated</li>
+            <li>The sequence gets longer each round that both players survive</li>
+            <li>Last player remaining wins the duel</li>
+            <li>Winner gets bragging rights!</li>
+          </ul>
+        </div>
+        <div class="howto-section">
+          <h3>🏆 Victory</h3>
+          <p>Outlast your opponent by maintaining perfect accuracy. One mistake and you're out!</p>
+        </div>
+      </div>
+      <div class="howto-modal-footer">
+        <button class="howto-understand-btn" data-modal="howto-2players-modal" data-mode="vs" data-players="2">I Understand - Start Dueling!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 Players Modal -->
+  <div id="howto-3players-modal" class="howto-modal">
+    <div class="howto-modal-content">
+      <div class="howto-modal-header">
+        <h2><span class="howto-icon">🔺</span> How To Play - 3 Players Battle</h2>
+        <span class="howto-close" data-modal="howto-3players-modal">&times;</span>
+      </div>
+      <div class="howto-modal-body">
+        <div class="howto-section">
+          <h3>🎮 Objective</h3>
+          <p>Triple threat! Three players compete in the ultimate memory challenge. Survive to be the champion!</p>
+        </div>
+        <div class="howto-section">
+          <h3>📋 Rules</h3>
+          <ul>
+            <li>All three players attempt the same sequence in turn order</li>
+            <li>Players are eliminated when they make a mistake</li>
+            <li>Surviving players continue to the next round with a longer sequence</li>
+            <li>Game continues until only one player remains</li>
+            <li>If multiple players make it through, the sequence increases</li>
+          </ul>
+        </div>
+        <div class="howto-section">
+          <h3>🏆 Victory</h3>
+          <p>Be the last player standing in this intense three-way memory battle!</p>
+        </div>
+      </div>
+      <div class="howto-modal-footer">
+        <button class="howto-understand-btn" data-modal="howto-3players-modal" data-mode="vs" data-players="3">I Understand - Start Battle!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 Players Modal -->
+  <div id="howto-4players-modal" class="howto-modal">
+    <div class="howto-modal-content">
+      <div class="howto-modal-header">
+        <h2><span class="howto-icon">💀</span> How To Play - Fatal 4-Way</h2>
+        <span class="howto-close" data-modal="howto-4players-modal">&times;</span>
+      </div>
+      <div class="howto-modal-body">
+        <div class="howto-section">
+          <h3>🎮 Objective</h3>
+          <p>Four players enter, one player leaves! The ultimate test of memory and nerves.</p>
+        </div>
+        <div class="howto-section">
+          <h3>📋 Rules</h3>
+          <ul>
+            <li>Four players take turns in sequence order</li>
+            <li>Each player must repeat the exact color sequence</li>
+            <li>One mistake eliminates you from the competition</li>
+            <li>Survivors advance to longer, more challenging sequences</li>
+            <li>The tension builds as players are eliminated one by one</li>
+          </ul>
+        </div>
+        <div class="howto-section">
+          <h3>🏆 Victory</h3>
+          <p>Survive the chaos and prove you have the ultimate memory. Fatal 4-Way champion!</p>
+        </div>
+      </div>
+      <div class="howto-modal-footer">
+        <button class="howto-understand-btn" data-modal="howto-4players-modal" data-mode="vs" data-players="4">I Understand - Enter the Arena!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 Players Modal -->
+  <div id="howto-5players-modal" class="howto-modal">
+    <div class="howto-modal-content">
+      <div class="howto-modal-header">
+        <h2><span class="howto-icon">🌟</span> How To Play - Pentagonal Panic</h2>
+        <span class="howto-close" data-modal="howto-5players-modal">&times;</span>
+      </div>
+      <div class="howto-modal-body">
+        <div class="howto-section">
+          <h3>🎮 Objective</h3>
+          <p>Five minds, one sequence, ultimate chaos! The most intense memory battle ever created.</p>
+        </div>
+        <div class="howto-section">
+          <h3>📋 Rules</h3>
+          <ul>
+            <li>Five players compete in the most challenging format</li>
+            <li>Turn-based elimination - one mistake and you're out</li>
+            <li>Longer wait times between turns increase the pressure</li>
+            <li>Only the most focused player will survive to the end</li>
+            <li>The sequence complexity scales with surviving players</li>
+          </ul>
+        </div>
+        <div class="howto-section">
+          <h3>🏆 Victory</h3>
+          <p>Achieve legendary status by conquering the ultimate 5-player memory mayhem!</p>
+        </div>
+      </div>
+      <div class="howto-modal-footer">
+        <button class="howto-understand-btn" data-modal="howto-5players-modal" data-mode="vs" data-players="5">I Understand - Begin the Madness!</button>
+      </div>
+    </div>
+  </div>
+
   <footer>
     SimonGame💙.io
   </footer>
@@ -77,6 +244,7 @@
   <script src="game.js" charset="utf-8"></script>
   <script src="vs-mode-patch.js" charset="utf-8"></script>
   <script src="vs-title-animation.js" charset="utf-8"></script>
+  <script src="howto-modal.js" charset="utf-8"></script>
 
 </body>
 
